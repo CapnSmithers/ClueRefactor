@@ -1,0 +1,11 @@
+G, Gallery
+B, Billiards Room
+L, Library
+E, Bedroom
+W, Wine Cellar
+A, Ballroom
+T, Bathroom
+C, Conservatory
+K, Kitchen
+P, Pantry
+H, Hallway
