@@ -17,7 +17,7 @@ public class Board {
 	private ArrayList<BoardCell> cells; //stores board
 	private Map<Character, String> rooms; //legend codes
 	private Map<Integer, LinkedList<Integer>> adjMtx; //adjacency list
-	private Set targets; //list of targets- gets cleared for every new calcTargets
+	private Set<BoardCell> targets; //list of targets- gets cleared for every new calcTargets
 	private boolean[] visited; //visited matrix
 	private int numRows;
 	private int numColumns;
@@ -25,14 +25,8 @@ public class Board {
 	private String legendName; //txt with legend file info
 	
 	public Board() {
-		boolean raderTests = false; //true = given tests, false = written tests
-		if (raderTests) {
-			mapName = "ClueLayout.csv"; //used in CR tests
-			legendName = "ClueLegend.txt";
-		} else {
-			mapName = "ClueMap.csv"; //default names- change to your own
-			legendName = "legend.txt";
-		}
+		mapName = "ClueMap.csv"; //default names- change to your own
+		legendName = "legend.txt";
 		cells = new ArrayList<BoardCell>(); //initializations
 		rooms = new HashMap<Character, String>();
 		adjMtx = new HashMap<Integer, LinkedList<Integer>>();
@@ -45,7 +39,7 @@ public class Board {
 		cells = new ArrayList<BoardCell>();
 		rooms = new HashMap<Character, String>();
 		adjMtx = new HashMap<Integer, LinkedList<Integer>>();
-		targets = new HashSet<Integer>();
+		targets = new HashSet<BoardCell>();
 	}
 	
 	public void loadConfigFiles() { //loads legend, then board, calcs adjacencies
@@ -102,7 +96,7 @@ public class Board {
 		return curCol;
 	}
 	
-	public void loadRoomConfig() throws BadConfigFormatException, FileNotFoundException {
+	public void loadRoomConfig() throws BadConfigFormatException, FileNotFoundException {  //loads legend
 		File f = new File(legendName);
 		Scanner in = new Scanner(f);
 		Scanner s = null;
@@ -123,9 +117,51 @@ public class Board {
 	
 	public void calcAdjacencies() { //same as CluePaths
 		for (int i = 0; i < numRows * numColumns; i++) {
-			adjMtx.put(i,getAdjList(i));
+			adjMtx.put(i, calcCellAdjacency(i));
 			visited[i] = false;
 		}
+	}
+	
+	private LinkedList<Integer> calcCellAdjacency(int index) { //gets adjacencies for index location
+		LinkedList<Integer> list = new LinkedList<Integer>();
+		BoardCell cell = getCellAt(index);
+		if (cell.isRoom() && !cell.isDoorway()) 
+			return list;
+		
+		int above = index - numColumns;
+		int below = index + numColumns;
+		int left = index - 1;
+		int right = index + 1;
+		
+		if (cell.isDoorway()) {
+			DoorDirection dir = getRoomCellAt(index).getDoorDirection();
+			switch (dir) { //cases for different door directions
+			case DOWN: 
+				list.add(below);
+				return list;
+			case UP:
+				list.add(above);
+				return list;
+			case LEFT:
+				list.add(left);
+				return list;
+			case RIGHT:
+				list.add(right);
+				return list;
+			default: 
+				return list;
+			}
+		}
+
+		if (checkAdjInBoard(above) && (checkAdjDoor(index, above) || getCellAt(above).isWalkway())) 
+			list.add(above); //box above checklist
+		if (checkAdjInBoard(left) && checkInRow(index, left) && (checkAdjDoor(index, left) || getCellAt(left).isWalkway())) 
+			list.add(left); //box to left checklist
+		if (checkAdjInBoard(right) && checkInRow(index, right) && (checkAdjDoor(index, right) || getCellAt(right).isWalkway())) 
+			list.add(right); //box to right checklist
+		if (checkAdjInBoard(below) && (checkAdjDoor(index, below) || getCellAt(below).isWalkway())) 
+			list.add(below); //box below checklist
+		return list;
 	}
 	
 	public LinkedList<Integer> getAdjList(int row, int col) { //gets adjacencies for row/col set
@@ -133,52 +169,22 @@ public class Board {
 		return getAdjList(index); //uses index method
 	}
 	
-	public LinkedList<Integer> getAdjList(int index) { //gets adjacencies for index location
-		LinkedList<Integer> list = new LinkedList<Integer>();
-		BoardCell cell = getCellAt(index);
-		if (cell.isRoom() && !cell.isDoorway()) return list;
-		if (cell.isDoorway()) {
-			DoorDirection dir = getRoomCellAt(index).getDoorDirection();
-			switch (dir) { //cases for different door directions
-			case DOWN: 
-				list.add(index + numColumns);
-				return list;
-			case UP:
-				list.add(index - numColumns);
-				return list;
-			case LEFT:
-				list.add(index - 1);
-				return list;
-			case RIGHT:
-				list.add(index + 1);
-				return list;
-			default: 
-				return list;
-			}
-		}
-		int index2 = index - numColumns;
-		if (checkAdjInBoard(index2) && (checkAdjDoor(index, index2) || getCellAt(index2).isWalkway())) 
-			list.add(index2); //box above checklist
-		index2 = index - 1;
-		if (checkAdjInBoard(index2) && checkInRow(index, index2) && (checkAdjDoor(index, index2) || getCellAt(index2).isWalkway())) 
-			list.add(index2); //box to left checklist
-		index2 = index + 1;
-		if (checkAdjInBoard(index2) && checkInRow(index, index2) && (checkAdjDoor(index, index2) || getCellAt(index2).isWalkway())) 
-			list.add(index2); //box to right checklist
-		index2 = index + numColumns;
-		if (checkAdjInBoard(index2) && (checkAdjDoor(index, index2) || getCellAt(index2).isWalkway())) 
-			list.add(index2); //box below checklist
-		return list;
+	public LinkedList<Integer> getAdjList(int index) {
+		return adjMtx.get(index);
 	}
 	
 	public boolean checkAdjInBoard(int index) { //checks if index is within board limits
-		if ((index >= 0) && (index < numColumns * numRows)) return true;
-		else return false;
+		if ((index >= 0) && (index < numColumns * numRows)) 
+			return true;
+		else 
+			return false;
 	}
 	
 	public boolean checkInRow(int index, int indexAdj) { //checks if the index is on the current row
-		if (indexAdj / numColumns == index / numColumns) return true;
-		else return false;
+		if (indexAdj / numColumns == index / numColumns) 
+			return true;
+		else 
+			return false;
 	}
 	
 	public boolean checkAdjDoor(int index, int indexAdj) { //index = original location, indexAdj = index to check
@@ -210,26 +216,26 @@ public class Board {
 	}
 	
 	public void calcTargets(int index, int steps) { //recursive fn, same as CluePaths
-		LinkedList<Integer> unvisited = new LinkedList<Integer>();
 		try {
 			if (adjMtx.get(index).size() == 0) 
 				throw new RuntimeException("Invalid location");
-			for (Integer i : adjMtx.get(index))
-				if (visited[i] == false) unvisited.add(i); //adds adjacent cell if not yet visited
-			for (int i : unvisited) {
-				visited[i] = true;
-				if ((steps == 1 || getCellAt(i).isDoorway())) targets.add(getCellAt(i)); //adds to potential targets if last step
-				else {
-					calcTargets(i, steps - 1); //recursive call if more steps are left
+			
+			for (Integer i : adjMtx.get(index)) {
+				if (visited[i] == false) {
+					visited[i] = true;
+					if ((steps == 1 || getCellAt(i).isDoorway())) 
+						targets.add(getCellAt(i)); //adds to potential targets if last step
+					else 
+						calcTargets(i, steps - 1); //recursive call if more steps are left
+					visited[i] = false;
 				}
-				visited[i] = false;
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}
 	
-	public Set getTargets() { //returns possible targets from instance variable
+	public Set<BoardCell> getTargets() { //returns possible targets from instance variable
 		return targets;
 	}
 	
@@ -239,15 +245,7 @@ public class Board {
 	
 	public RoomCell getRoomCellAt(int row, int col) { //gets cell if it's room, otherwise gives null
 		int index = calcIndex(row, col);
-		if (cells.get(index) instanceof RoomCell)
-			return (RoomCell) cells.get(index);
-		else
-			return null;
-	}
-	
-	public BoardCell getCellAt(int row, int col) { //gets cell regardless of walkway/room definition
-		int index = calcIndex(row, col);
-		return cells.get(index); //uses index method
+		return getRoomCellAt(index);
 	}
 	
 	public RoomCell getRoomCellAt(int index) { //index form of getRoomCellAt
@@ -257,11 +255,16 @@ public class Board {
 			return null;
 	}
 	
+	public BoardCell getCellAt(int row, int col) { //gets cell regardless of walkway/room definition
+		int index = calcIndex(row, col);
+		return getCellAt(index); //uses index method
+	}
+	
 	public BoardCell getCellAt(int index) {//gets cell regardless of walkway/room definition
 		return cells.get(index);
 	}
 	
-	public Map getRooms() {
+	public Map<Character, String> getRooms() {
 		return rooms;
 	}
 	
