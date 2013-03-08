@@ -123,45 +123,45 @@ public class Board {
 	}
 	
 	private LinkedList<Integer> calcCellAdjacency(int index) { //gets adjacencies for index location
-		LinkedList<Integer> list = new LinkedList<Integer>();
-		BoardCell cell = getCellAt(index);
-		if (cell.isRoom() && !cell.isDoorway()) 
-			return list;
+		LinkedList<Integer> adjList = new LinkedList<Integer>();
+		BoardCell currentCell = getCellAt(index);
+		if (currentCell.isRoom() && !currentCell.isDoorway()) 
+			return adjList;
 		
 		int above = index - numColumns;
 		int below = index + numColumns;
 		int left = index - 1;
 		int right = index + 1;
 		
-		if (cell.isDoorway()) {
+		if (currentCell.isDoorway()) {
 			DoorDirection dir = getRoomCellAt(index).getDoorDirection();
 			switch (dir) { //cases for different door directions
 			case DOWN: 
-				list.add(below);
-				return list;
+				adjList.add(below);
+				return adjList;
 			case UP:
-				list.add(above);
-				return list;
+				adjList.add(above);
+				return adjList;
 			case LEFT:
-				list.add(left);
-				return list;
+				adjList.add(left);
+				return adjList;
 			case RIGHT:
-				list.add(right);
-				return list;
+				adjList.add(right);
+				return adjList;
 			default: 
-				return list;
+				return adjList;
 			}
 		}
 
 		if (checkAdjInBoard(above) && (checkAdjDoor(index, above) || getCellAt(above).isWalkway())) 
-			list.add(above); //box above checklist
+			adjList.add(above); //box above checklist
 		if (checkAdjInBoard(left) && checkInRow(index, left) && (checkAdjDoor(index, left) || getCellAt(left).isWalkway())) 
-			list.add(left); //box to left checklist
+			adjList.add(left); //box to left checklist
 		if (checkAdjInBoard(right) && checkInRow(index, right) && (checkAdjDoor(index, right) || getCellAt(right).isWalkway())) 
-			list.add(right); //box to right checklist
+			adjList.add(right); //box to right checklist
 		if (checkAdjInBoard(below) && (checkAdjDoor(index, below) || getCellAt(below).isWalkway())) 
-			list.add(below); //box below checklist
-		return list;
+			adjList.add(below); //box below checklist
+		return adjList;
 	}
 	
 	public LinkedList<Integer> getAdjList(int row, int col) { //gets adjacencies for row/col set
@@ -193,13 +193,17 @@ public class Board {
 			DoorDirection dir = cell.getDoorDirection();
 			switch (dir) { //door cases
 			case DOWN: 
-				if (index == indexAdj + numColumns) return true;
+				if (index == indexAdj + numColumns) 
+				return true;
 			case UP:
-				if (index == indexAdj - numColumns) return true;
+				if (index == indexAdj - numColumns) 
+				return true;
 			case LEFT:
-				if (index == indexAdj - 1) return true;
+				if (index == indexAdj - 1) 
+				return true;
 			case RIGHT:
-				if (index == indexAdj + 1) return true;
+				if (index == indexAdj + 1) 
+				return true;
 			default: 
 				return false;
 			}
