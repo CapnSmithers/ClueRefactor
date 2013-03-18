@@ -23,7 +23,7 @@ public class BadConfigFormatException extends Exception {
 			out.close();
 		} 
 		catch (Exception e) {
-			System.out.println("Error: " + e.getMessage());
+			System.out.println("Error in writing to log: " + e.getMessage());
 		}
 	}
 	

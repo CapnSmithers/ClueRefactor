@@ -44,12 +44,12 @@ public class Board {
 	
 	public void loadConfigFiles() { //loads legend, then board, calcs adjacencies
 		try {
-			loadRoomConfig();
-			loadBoardConfig();
+			loadRoomConfig();      //Load legend
+			loadBoardConfig();	   //Load board
 			visited = new boolean[numRows * numColumns];
 			calcAdjacencies();
 		} catch (Exception e) {
-			System.out.println("Woops"); //if exception is found
+			e.printStackTrace(); //if exception is found
 		}
 	}
 	
