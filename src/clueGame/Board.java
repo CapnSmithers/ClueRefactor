@@ -25,9 +25,10 @@ public class Board {
 	private String legendName; //txt with legend file info
 	
 	public Board() {
-		mapName = "ClueMap.csv"; //default names- change to your own
-		legendName = "legend.txt";
-		cells = new ArrayList<BoardCell>(); //initializations
+		mapName = "ClueMap.csv"; //default map name
+		legendName = "legend.txt"; //default legend name
+		//initializations
+		cells = new ArrayList<BoardCell>(); 
 		rooms = new HashMap<Character, String>();
 		adjMtx = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new HashSet<BoardCell>();
@@ -36,6 +37,7 @@ public class Board {
 	public Board(String mapName, String legendName) { //instantiator with filenames
 		this.mapName = mapName;
 		this.legendName = legendName;
+		//initializations
 		cells = new ArrayList<BoardCell>();
 		rooms = new HashMap<Character, String>();
 		adjMtx = new HashMap<Integer, LinkedList<Integer>>();
@@ -63,7 +65,7 @@ public class Board {
 		while (in.hasNextLine()) {
 			int currentCols = loadRoomLine(in, numRows);
 			if (currentCols != numCols) //throws exceptions if number of cols is different
-				throw new BadConfigFormatException();
+				throw new BadConfigFormatException(mapName);
 			numRows++;
 		}
 		this.numRows = numRows; //stores # of rows and cols
@@ -105,10 +107,10 @@ public class Board {
 			s.useDelimiter(",");
 			String buffer = s.next();
 			if (buffer.length() > 1) //exception if legend is more than one letter initial
-				throw new BadConfigFormatException();
+				throw new BadConfigFormatException(legendName);
 			Character key = buffer.charAt(0); //grabs first character
 			if (!(s.hasNext())) //exception if there's more information
-				throw new BadConfigFormatException();
+				throw new BadConfigFormatException(legendName);
 			String value = s.next().trim(); //cuts off spaces (safety feature)
 			rooms.put(key, value);
 		}
