@@ -5,8 +5,8 @@ import java.util.Set;
 
 public class ClueGame {
 	private Set<Card> cards;
-	private Player[] players;
-	private HumanPlayer humanPlayer;
+	public Player[] players;    //Public to test
+	public HumanPlayer humanPlayer;
 	private int curPlayerTurn;
 	private Solution solution;
 	private Board board;
@@ -15,9 +15,9 @@ public class ClueGame {
 		super();
 		cards = new HashSet<Card>();
 		players = new Player[6];
-		players[0] = new HumanPlayer("");
+		players[0] = new HumanPlayer("","",0);
 		humanPlayer = (HumanPlayer) players[0];
-		for (int i = 1; i < 6; i++) players[i] = new ComputerPlayer("");
+		for (int i = 1; i < 6; i++) players[i] = new ComputerPlayer("","",0);
 		curPlayerTurn = 0;
 		solution = new Solution("", "", "");
 		board = new Board();
