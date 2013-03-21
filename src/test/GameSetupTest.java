@@ -13,10 +13,10 @@ import clueGame.Player;
 
 public class GameSetupTest {
 	
-	ClueGame game;
+	static ClueGame game;
 	
 	@BeforeClass
-	public void setup() {
+	public static void setup() {
 		game = new ClueGame();
 		game.deal();
 	}

@@ -9,6 +9,13 @@ public class Player {
 	
 	protected ArrayList<Card> myCards;
 	
+	//For testing only
+	public Player() {
+		this.playerName = "Professor Plum";
+		this.color = "purple";
+		this.startingLocation = (16*23);
+	}
+	
 	public Player(String playerName, String color, Integer startingLocation) {
 		super();
 		this.playerName = playerName;

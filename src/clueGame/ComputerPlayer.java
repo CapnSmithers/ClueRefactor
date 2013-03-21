@@ -6,15 +6,17 @@ public class ComputerPlayer extends Player {
 	
 	private char lastRoomVisited;
 
-	
+	public ComputerPlayer() {
+		super();
+	}
 
 	public ComputerPlayer(String playerName, String color,
 			Integer startingLocation) {
 		super(playerName, color, startingLocation);
 	}
 
-	public void pickLocation(Set<BoardCell> targets) {
-		
+	public BoardCell pickLocation(Set<BoardCell> targets) {
+		return null;	
 	}
 	
 	public void createSuggestion() {
