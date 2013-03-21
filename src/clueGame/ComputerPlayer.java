@@ -24,4 +24,16 @@ public class ComputerPlayer extends Player {
 	public void updateSeen(Card seen) {
 		
 	}
+	
+	/*
+	 * Getters and Setters for Testing only
+	 */
+
+	public char getLastRoomVisited() {
+		return lastRoomVisited;
+	}
+
+	public void setLastRoomVisited(char lastRoomVisited) {
+		this.lastRoomVisited = lastRoomVisited;
+	}
 }

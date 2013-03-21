@@ -47,6 +47,14 @@ public class Player {
 	public void setStartingLocation(Integer startingLocation) {
 		this.startingLocation = startingLocation;
 	}
+
+	public ArrayList<Card> getMyCards() {
+		return myCards;
+	}
+
+	public void setMyCards(ArrayList<Card> myCards) {
+		this.myCards = myCards;
+	}
 	
 	
 	
