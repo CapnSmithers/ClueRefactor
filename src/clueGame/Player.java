@@ -24,8 +24,8 @@ public class Player {
 		this.myCards = new ArrayList<Card>();
 	}
 	
-	public Card disproveSuggestion() {
-		return new Card("", Card.CardType.PERSON);
+	public Card disproveSuggestion(Card person, Card room, Card weapon) {
+		return null;
 	}
 
 	/*

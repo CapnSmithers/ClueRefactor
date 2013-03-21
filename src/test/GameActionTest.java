@@ -1,6 +1,9 @@
 package test;
 
 import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
 import junit.framework.Assert;
 
 import org.junit.BeforeClass;
@@ -8,6 +11,7 @@ import org.junit.Test;
 
 import clueGame.Board;
 import clueGame.BoardCell;
+import clueGame.Card;
 import clueGame.ClueGame;
 import clueGame.ComputerPlayer;
 import clueGame.Solution;
@@ -18,14 +22,21 @@ public class GameActionTest {
 	static Board board = null;
 	static Solution testSolution = null;
 	static Solution wrongSolution = null;
+	static Card personSuggestion = null;
+	static Card roomSuggestion = null;
+	static Card weaponSuggestion = null;
 	
 	@BeforeClass
 	public static void setup() {
 		board = new Board();
+		board.loadConfigFiles();
 		game = new ClueGame();
 		game.deal();
 		testSolution = game.setSolution();  //testSolution is set to Col Mustard, Revolver, Ballroom
 		wrongSolution = game.setWrongSolution();
+		personSuggestion = new Card("Miss Scarlet", Card.CardType.PERSON);
+		roomSuggestion = new Card("Bathroom", Card.CardType.ROOM);
+		weaponSuggestion = new Card("Revolver", Card.CardType.WEAPON);
 	}
 	
 	@Test
@@ -114,12 +125,96 @@ public class GameActionTest {
 	//Should select random location
 	@Test
 	public void checkTargetRoomVisited() {
-		fail("Not yet implemented");
+		ComputerPlayer compPlayer = new ComputerPlayer();
+		compPlayer.setLastRoomVisited('A');
+		//Location with previously visited door
+		board.calcTargets(20,11,1);
+		int previousRoom = 0;
+		int location21_11 = 0;
+		int location20_10 = 0;
+		int location20_12 = 0;
+		for(int i = 0; i > 50; i++) {
+			BoardCell selected = compPlayer.pickLocation(board.getTargets());
+			if(selected == board.getCellAt(19,11)) {
+				previousRoom++;
+			} else if (selected == board.getCellAt(21,11)) {
+				location21_11++;
+			} else if (selected == board.getCellAt(20, 10)) {
+				location20_10++;
+			} else {
+				location20_12++;
+			}
+		}
+		//Player should randomly select between all avaliable locations
+		assertEquals(50, location21_11+location20_10+location20_12+previousRoom);
+		assertTrue(previousRoom > 5);
+		assertTrue(location20_10 > 5);
+		assertTrue(location20_12 > 5);
+		assertTrue(location21_11 > 5);
 	}
 	
 	@Test
-	public void disproveSuggestionTest() {
-		fail("Not yet implemented");
+	public void disproveSuggestionOnePerson() {
+		//Test one player, one correct match
+		ComputerPlayer p = new ComputerPlayer();
+		ArrayList<Card> sixCards = new ArrayList<Card>();
+		sixCards.add(new Card("Knife", Card.CardType.WEAPON));
+		sixCards.add(new Card("Lead Pipe", Card.CardType.WEAPON));
+		sixCards.add(new Card("Ballroom", Card.CardType.ROOM));
+		sixCards.add(new Card("Billiards Room", Card.CardType.ROOM));
+		sixCards.add(new Card("Colonel Mustard", Card.CardType.PERSON));
+		sixCards.add(new Card("Mrs. Peacock", Card.CardType.PERSON));
+		p.setMyCards(sixCards);
+		
+		//Test if no cards are in hand
+		assertNull(p.disproveSuggestion(personSuggestion, roomSuggestion, weaponSuggestion));
+		
+		//Test correct person
+		assertEquals(new Card("Mrs. Peacock", Card.CardType.PERSON),
+				p.disproveSuggestion(new Card("Mrs. Peacock", Card.CardType.PERSON), roomSuggestion, weaponSuggestion));
+		
+		//Test correct room
+		assertEquals(new Card("Ballroom", Card.CardType.ROOM),
+				p.disproveSuggestion(personSuggestion, new Card("Ballroom", Card.CardType.ROOM), weaponSuggestion));
+		
+		//Test correct weapon
+		assertEquals(new Card("Lead Pipe", Card.CardType.WEAPON),
+				p.disproveSuggestion(personSuggestion, roomSuggestion, new Card("Lead Pipe", Card.CardType.WEAPON)));
+		
+	}
+	
+	@Test
+	public void disproveSuggestionMultpleMatches() {
+		//Test one player, multiple correct matches
+		ComputerPlayer p = new ComputerPlayer();
+		ArrayList<Card> threeCards = new ArrayList<Card>();
+		threeCards.add(weaponSuggestion);
+		threeCards.add(roomSuggestion);
+		threeCards.add(personSuggestion);
+		p.setMyCards(threeCards);
+		
+		int room = 0;
+		int weapon = 0;
+		int person = 0;
+		int other = 0;
+		for (int i = 0; i < 30; i++) {
+			Card suggestion = p.disproveSuggestion(personSuggestion, roomSuggestion, weaponSuggestion);
+			if(suggestion == weaponSuggestion) {
+				weapon++;
+			} else if (suggestion == roomSuggestion) {
+				room++;
+			} else if (suggestion == personSuggestion) {
+				person++;
+			} else {
+				other++;
+			}
+		}
+		assertEquals(30, weapon+person+room+other);
+		assertTrue(weapon > 1);
+		assertTrue(room > 1);
+		assertTrue(person > 1);
+		assertTrue(other == 0);
+		
 	}
 	
 	@Test
