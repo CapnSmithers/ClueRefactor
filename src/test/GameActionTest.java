@@ -14,6 +14,8 @@ import clueGame.BoardCell;
 import clueGame.Card;
 import clueGame.ClueGame;
 import clueGame.ComputerPlayer;
+import clueGame.HumanPlayer;
+import clueGame.Player;
 import clueGame.Solution;
 
 public class GameActionTest {
@@ -153,6 +155,7 @@ public class GameActionTest {
 		assertTrue(location21_11 > 5);
 	}
 	
+	//Tests disproveSuggestion for one player when they have only one card to show
 	@Test
 	public void disproveSuggestionOnePerson() {
 		//Test one player, one correct match
@@ -183,6 +186,7 @@ public class GameActionTest {
 		
 	}
 	
+	//Tests for one player when they have multiple correct matches with the suggestion
 	@Test
 	public void disproveSuggestionMultpleMatches() {
 		//Test one player, multiple correct matches
@@ -214,6 +218,38 @@ public class GameActionTest {
 		assertTrue(room > 1);
 		assertTrue(person > 1);
 		assertTrue(other == 0);
+		
+	}
+	
+	//Tests to ensure that disproveSuggestion works for multiple players
+	@Test
+	public void disproveSuggestionMultiplePlayers() {
+		//Populate players
+		ArrayList<Player> players = new ArrayList<Player>();
+		players.add(new HumanPlayer("Colonel Mustard", "Yellow", 0));
+		for(int i = 0; i > 3; i++) {
+			players.add(new ComputerPlayer());   //Adds 3 computer players on top of the one human player
+		}
+		
+		//Assign players specific cards
+		ArrayList<Card> p1Cards = new ArrayList<Card>();
+		ArrayList<Card> p2Cards = new ArrayList<Card>();
+		ArrayList<Card> p3Cards = new ArrayList<Card>();
+		ArrayList<Card> humanCards = new ArrayList<Card>();
+		
+		p1Cards.add(new Card("Knife", Card.CardType.WEAPON));
+		p1Cards.add(new Card("Miss Scarlet", Card.CardType.PERSON));
+		p2Cards.add(new Card("Revolver", Card.CardType.WEAPON));
+		p2Cards.add(new Card("Ballroom", Card.CardType.ROOM));
+		p3Cards.add(new Card("Lead Pipe", Card.CardType.WEAPON));
+		p3Cards.add(new Card("Gallery", Card.CardType.ROOM));
+		humanCards.add(new Card("Mr. Green", Card.CardType.PERSON));
+		humanCards.add(new Card("Conservatory", Card.CardType.ROOM));
+		
+		players.get(0).setMyCards(humanCards);
+		players.get(1).setMyCards(p1Cards);
+		players.get(2).setMyCards(p2Cards);
+		players.get(3).setMyCards(p3Cards);
 		
 	}
 	
