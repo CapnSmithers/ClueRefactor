@@ -227,7 +227,7 @@ public class GameActionTest {
 		//Populate players
 		ArrayList<Player> players = new ArrayList<Player>();
 		players.add(new HumanPlayer("Colonel Mustard", "Yellow", 0));
-		for(int i = 0; i > 3; i++) {
+		for(int i = 0; i < 3; i++) {
 			players.add(new ComputerPlayer());   //Adds 3 computer players on top of the one human player
 		}
 		
@@ -251,6 +251,41 @@ public class GameActionTest {
 		players.get(2).setMyCards(p2Cards);
 		players.get(3).setMyCards(p3Cards);
 		
+		//set game players to list defined above
+		game.players = players;
+		
+		//no one can disprove - null should be returned
+		Assert.assertNull(game.handleSuggestion("Mrs. White", "Bathroom", "Rope", players.get(2)));
+		//only the human player can disprove - Mr. Green should be returned
+		Assert.assertEquals(new Card("Mr. Green", Card.CardType.PERSON), game.handleSuggestion("Mr. Green", "Bathroom", "Rope", players.get(2)));
+		//only the human player can disprove, but the human player is making the accusation - null should be returned
+		Assert.assertNull(game.handleSuggestion("Mr. Green", "Bathroom", "Rope", players.get(0)));
+		//only computer player 2 can disprove, but that player is making the accusation - null should be returned
+		Assert.assertNull(game.handleSuggestion("Mrs. White", "Ballroom", "Rope", players.get(2)));
+	
+		int room = 0;
+		int weapon = 0;
+		int person = 0;
+		int other = 0;
+		//situation where two players can disprove. Make sure same player isn't queried each time 
+		//and same card isn't returned each time
+		for (int i = 0; i < 30; i++) {
+			Card suggestion = game.handleSuggestion("Mr. Green", "Gallery", "Rope", players.get(1));
+			if (suggestion == new Card("Mr. Green", Card.CardType.PERSON)) {
+				person++;
+			} else if (suggestion == new Card("Gallery", Card.CardType.ROOM)) {
+				room++;
+			} else if (suggestion == new Card("Rope", Card.CardType.WEAPON)) {
+				weapon++;
+			} else {
+				other++;
+			}
+		}
+		assertEquals(30, weapon+person+room+other);
+		assertTrue(person > 1);
+		assertTrue(room > 1);
+		assertTrue(weapon == 0);
+		assertTrue(other == 0);
 	}
 	
 	@Test

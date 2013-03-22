@@ -26,18 +26,18 @@ public class GameSetupTest {
 		//Name Tests
 		HumanPlayer human = game.humanPlayer;
 		Assert.assertEquals("Col Mustard", human.getPlayerName());
-		Assert.assertEquals("Mrs. White", game.players[2].getPlayerName());
-		Assert.assertEquals("Professor Plum", game.players[5].getPlayerName());
+		Assert.assertEquals("Mrs. White", game.players.get(2).getPlayerName());
+		Assert.assertEquals("Professor Plum", game.players.get(5).getPlayerName());
 		
 		//Color Tests
 		Assert.assertEquals("yellow", human.getColor());
-		Assert.assertEquals("white", game.players[2].getColor());
-		Assert.assertEquals("purple", game.players[5].getColor());
+		Assert.assertEquals("white", game.players.get(2).getColor());
+		Assert.assertEquals("purple", game.players.get(5).getColor());
 		
 		//Start location tests -- startingLocation is of type Integer, so we must cast calcIndex to Integer
 		Assert.assertEquals((Integer)game.getBoard().calcIndex(23, 6), human.getStartingLocation());
-		Assert.assertEquals((Integer)game.getBoard().calcIndex(17, 23), game.players[2].getStartingLocation());
-		Assert.assertEquals((Integer)game.getBoard().calcIndex(16, 0), game.players[5].getStartingLocation());
+		Assert.assertEquals((Integer)game.getBoard().calcIndex(17, 23), game.players.get(2).getStartingLocation());
+		Assert.assertEquals((Integer)game.getBoard().calcIndex(16, 0), game.players.get(5).getStartingLocation());
 	
 	}
 	

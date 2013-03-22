@@ -1,11 +1,12 @@
 package clueGame;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 public class ClueGame {
 	private Set<Card> cards;
-	public Player[] players;    //Public to test
+	public ArrayList<Player> players;    //Public to test
 	public HumanPlayer humanPlayer;
 	private int curPlayerTurn;
 	private Solution solution;
@@ -14,10 +15,11 @@ public class ClueGame {
 	public ClueGame() {
 		super();
 		cards = new HashSet<Card>();
-		players = new Player[6];
-		players[0] = new HumanPlayer("","",0);
-		humanPlayer = (HumanPlayer) players[0];
-		for (int i = 1; i < 6; i++) players[i] = new ComputerPlayer("","",0);
+		players = new ArrayList<Player>();
+		players.add(new HumanPlayer("","",0));
+		humanPlayer = (HumanPlayer) players.get(0);
+		for (int i = 1; i < 6; i++) 
+			players.add(new ComputerPlayer("","",0));
 		curPlayerTurn = 0;
 		solution = new Solution("", "", "");
 		board = new Board();
@@ -35,8 +37,8 @@ public class ClueGame {
 		
 	}
 	
-	public void handleSuggestion(String person, String room, String weapon, Player accusingPerson) {
-		
+	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson) {
+		return null;
 	}
 	
 	public boolean checkAccusation(Solution solution) {
