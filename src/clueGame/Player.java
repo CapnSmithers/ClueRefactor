@@ -5,7 +5,8 @@ import java.util.ArrayList;
 public class Player {
 	private String playerName;
 	private String color;
-	private Integer startingLocation;
+	private int startingLocation;
+	private int currentLocation;
 	
 	protected ArrayList<Card> myCards;
 	
@@ -14,6 +15,8 @@ public class Player {
 		this.playerName = "Professor Plum";
 		this.color = "purple";
 		this.startingLocation = (16*23);
+		this.currentLocation = this.startingLocation;
+		this.myCards = new ArrayList<Card>();
 	}
 	
 	public Player(String playerName, String color, Integer startingLocation) {
@@ -21,6 +24,7 @@ public class Player {
 		this.playerName = playerName;
 		this.color = color;
 		this.startingLocation = startingLocation;
+		this.currentLocation = this.startingLocation;
 		this.myCards = new ArrayList<Card>();
 	}
 	
@@ -63,7 +67,11 @@ public class Player {
 		this.myCards = myCards;
 	}
 	
-	
-	
-	
+	public int getCurrentLocation() {
+		return currentLocation;
+	}
+
+	public void setCurrentLocation(int currentLocation) {
+		this.currentLocation = currentLocation;
+	}
 }

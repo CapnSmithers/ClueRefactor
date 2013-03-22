@@ -8,9 +8,9 @@ public class ClueGame {
 	private Set<Card> cards;
 	public ArrayList<Player> players;    //Public to test
 	public HumanPlayer humanPlayer;
-	private int curPlayerTurn;
+	public int curPlayerTurn;
 	private Solution solution;
-	private Board board;
+	public Board board;
 	
 	public ClueGame() {
 		super();
@@ -39,6 +39,11 @@ public class ClueGame {
 	
 	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson) {
 		return null;
+	}
+	
+	public Solution createSuggestion() {
+		//create a suggestion for the current player
+		return new Solution("", "", "");
 	}
 	
 	public boolean checkAccusation(Solution solution) {

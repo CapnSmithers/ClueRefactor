@@ -3,6 +3,8 @@ package test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import junit.framework.Assert;
 
@@ -288,9 +290,124 @@ public class GameActionTest {
 		assertTrue(other == 0);
 	}
 	
+	//Tests to make sure that a computer player does not make a suggestion using any cards that has already
+	//been revealed. Only one possible suggestion possibility.
 	@Test
-	public void makeSuggestionTest() {
-		fail("Not yet implemented");
+	public void makeSuggestionOnePossibilityTest() {
+		//Make a mock deck
+		Set<Card> deck = new HashSet<Card>();
+		deck.add(new Card("Knife", Card.CardType.WEAPON));
+		deck.add(personSuggestion);
+		deck.add(weaponSuggestion);
+		deck.add(new Card("Ballroom", Card.CardType.ROOM));
+		deck.add(new Card("Lead Pipe", Card.CardType.WEAPON));
+		deck.add(new Card("Gallery", Card.CardType.ROOM));
+		deck.add(new Card("Mr. Green", Card.CardType.PERSON));
+		deck.add(new Card("Conservatory", Card.CardType.ROOM));
+		
+		//set all cards except for single weapon and single person to revealed
+		for (Card c: deck) {
+			if (!c.equals(personSuggestion) && !c.equals(weaponSuggestion))
+				c.setHasBeenRevealed(true);
+		}
+		
+		//Populate players
+		ArrayList<Player> players = new ArrayList<Player>();
+		players.add(new HumanPlayer("Colonel Mustard", "Yellow", 0));
+		for(int i = 0; i < 3; i++) {
+			players.add(new ComputerPlayer());   //Adds 3 computer players on top of the one human player
+		}
+		
+		//establish test - set players, board, player 1 location, and make it player 1's turn
+		int ballroomCell = board.calcIndex(8, 1);	
+		game.board = board;
+		game.players = players;
+		game.players.get(1).setCurrentLocation(ballroomCell);
+		game.curPlayerTurn = 1;
+		
+		//creates suggestion for current player (player 1)
+		Solution suggestion = game.createSuggestion();
+		
+		//result should be current room (ballroom), personSuggestion, and weaponSuggestion
+		Assert.assertEquals(personSuggestion, new Card(suggestion.person, Card.CardType.PERSON));
+		Assert.assertEquals(weaponSuggestion, new Card(suggestion.person, Card.CardType.WEAPON));
+		Assert.assertEquals(roomSuggestion, new Card("Ballroom", Card.CardType.ROOM));
 	}
 
+	//Tests to make sure that a computer player does not make a suggestion using any cards that has already
+	//been revealed. Multiple person possibilities will be available
+	@Test
+	public void makeSuggestionMultiplePossibilityTest() {
+		Card personSuggestion2 = new Card("Mr. Green", Card.CardType.PERSON);
+		
+		//Make a mock deck
+		Set<Card> deck = new HashSet<Card>();
+		deck.add(new Card("Knife", Card.CardType.WEAPON));
+		deck.add(personSuggestion);
+		deck.add(weaponSuggestion);
+		deck.add(new Card("Ballroom", Card.CardType.ROOM));
+		deck.add(new Card("Lead Pipe", Card.CardType.WEAPON));
+		deck.add(new Card("Gallery", Card.CardType.ROOM));
+		deck.add(personSuggestion2);
+		deck.add(new Card("Conservatory", Card.CardType.ROOM));
+		
+		//set all cards except for single weapon and two persons to revealed
+		for (Card c: deck) {
+			if (!c.equals(personSuggestion) && !c.equals(personSuggestion2) && !c.equals(weaponSuggestion))
+				c.setHasBeenRevealed(true);
+		}
+		
+		//Populate players
+		ArrayList<Player> players = new ArrayList<Player>();
+		players.add(new HumanPlayer("Colonel Mustard", "Yellow", 0));
+		for(int i = 0; i < 3; i++) {
+			players.add(new ComputerPlayer());   //Adds 3 computer players on top of the one human player
+		}
+		
+		//establish test - set players, board, player 1 location, and make it player 1's turn
+		int ballroomCell = board.calcIndex(8, 1);	
+		game.board = board;
+		game.players = players;
+		game.players.get(1).setCurrentLocation(ballroomCell);
+		game.curPlayerTurn = 1;
+		
+		//make sure each person is used at least once and single weapon is used every time
+		int person1 = 0;
+		int person2 = 0;
+		int personother = 0;
+		int weapon = 0;
+		int weaponother = 0;
+		for (int i = 0; i < 30; i++) {
+			//creates suggestion for current player (player 1)
+			Solution suggestion = game.createSuggestion();
+			
+			//check person
+			if (suggestion.person == personSuggestion.getCardName()) {
+				person1++;
+			}
+			else if (suggestion.person == personSuggestion2.getCardName()) {
+				person2++;
+			}
+			else {
+				personother++;
+			}
+			
+			//check weapon
+			if (suggestion.weapon == weaponSuggestion.getCardName()) {
+				weapon++;
+			}
+			else {
+				weaponother++;
+			}
+		}
+		
+		assertEquals(30, person1+person2+personother);
+		assertTrue(person1 > 1);
+		assertTrue(person2 > 1);
+		assertTrue(personother == 0);
+		
+		assertEquals(30, weapon+weaponother);
+		assertTrue(weapon > 1);
+		assertTrue(weaponother == 0);
+	}
 }

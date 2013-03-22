@@ -7,6 +7,7 @@ public class Card {
 	
 	private String cardName;
 	private CardType cardType;
+	private boolean hasBeenRevealed;
 	
 	public Card(String cardName, CardType cardType) {
 		super();
@@ -30,7 +31,15 @@ public class Card {
 		this.cardType = cardType;
 	}
 
-    @Override
+    public boolean isHasBeenRevealed() {
+		return hasBeenRevealed;
+	}
+
+	public void setHasBeenRevealed(boolean hasBeenRevealed) {
+		this.hasBeenRevealed = hasBeenRevealed;
+	}
+
+	@Override
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
