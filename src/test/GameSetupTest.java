@@ -18,27 +18,25 @@ public class GameSetupTest {
 	@BeforeClass
 	public static void setup() {
 		game = new ClueGame();
-		game.deal();
 	}
 	
 	@Test
 	public void loadPeopleTests() {
 		//Name Tests
 		HumanPlayer human = game.humanPlayer;
-		Assert.assertEquals("Col Mustard", human.getPlayerName());
+		Assert.assertEquals("Colonel Mustard", human.getPlayerName());
 		Assert.assertEquals("Mrs. White", game.players.get(2).getPlayerName());
 		Assert.assertEquals("Professor Plum", game.players.get(5).getPlayerName());
 		
 		//Color Tests
-		Assert.assertEquals("yellow", human.getColor());
-		Assert.assertEquals("white", game.players.get(2).getColor());
-		Assert.assertEquals("purple", game.players.get(5).getColor());
+		Assert.assertEquals("yellow", human.getColorStr());
+		Assert.assertEquals("white", game.players.get(2).getColorStr());
+		Assert.assertEquals("purple", game.players.get(5).getColorStr());
 		
 		//Start location tests -- startingLocation is of type Integer, so we must cast calcIndex to Integer
 		Assert.assertEquals((Integer)game.getBoard().calcIndex(23, 6), human.getStartingLocation());
 		Assert.assertEquals((Integer)game.getBoard().calcIndex(17, 23), game.players.get(2).getStartingLocation());
 		Assert.assertEquals((Integer)game.getBoard().calcIndex(16, 0), game.players.get(5).getStartingLocation());
-	
 	}
 	
 	@Test
@@ -74,6 +72,7 @@ public class GameSetupTest {
 		//Test all cards have been dealt - each player should have exactly 3 cards + 3 cards in solution
 		//Also tests that all players have the same number of cards
 		for(Player p: game.players) {
+			int test = p.getMyCards().size();
 			Assert.assertEquals(3, p.getMyCards().size());
 		}
 		Assert.assertNotSame("", game.getSolution().person);

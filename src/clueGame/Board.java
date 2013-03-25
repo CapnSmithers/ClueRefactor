@@ -21,27 +21,30 @@ public class Board {
 	private boolean[] visited; //visited matrix
 	private int numRows;
 	private int numColumns;
-	private String mapName; //csv file with board initials
-	private String legendName; //txt with legend file info
+	private String mapConfigFileName, legendConfigFilename; //csv file with board initials; txt with legend file info
 	
 	public Board() {
-		mapName = "ClueMap.csv"; //default map name
-		legendName = "legend.txt"; //default legend name
+		mapConfigFileName = "ClueMap.csv"; //default map name
+		legendConfigFilename = "legend.txt"; //default legend name
 		//initializations
 		cells = new ArrayList<BoardCell>(); 
 		rooms = new HashMap<Character, String>();
 		adjMtx = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new HashSet<BoardCell>();
+		
+		loadConfigFiles();
 	}
 	
 	public Board(String mapName, String legendName) { //instantiator with filenames
-		this.mapName = mapName;
-		this.legendName = legendName;
+		mapConfigFileName = mapName;
+		legendConfigFilename = legendName;
 		//initializations
 		cells = new ArrayList<BoardCell>();
 		rooms = new HashMap<Character, String>();
 		adjMtx = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new HashSet<BoardCell>();
+		
+		loadConfigFiles();
 	}
 	
 	public void loadConfigFiles() { //loads legend, then board, calcs adjacencies
@@ -56,7 +59,7 @@ public class Board {
 	}
 	
 	public void loadBoardConfig() throws BadConfigFormatException, FileNotFoundException {
-		File f = new File(mapName);
+		File f = new File(mapConfigFileName);
 		Scanner in = new Scanner(f);
 		int numRows = 0;
 		//preloader config: runs the first row to find out the number of columns
@@ -65,7 +68,7 @@ public class Board {
 		while (in.hasNextLine()) {
 			int currentCols = loadRoomLine(in, numRows);
 			if (currentCols != numCols) //throws exceptions if number of cols is different
-				throw new BadConfigFormatException(mapName);
+				throw new BadConfigFormatException(mapConfigFileName);
 			numRows++;
 		}
 		this.numRows = numRows; //stores # of rows and cols
@@ -99,7 +102,7 @@ public class Board {
 	}
 	
 	public void loadRoomConfig() throws BadConfigFormatException, FileNotFoundException {  //loads legend
-		File f = new File(legendName);
+		File f = new File(legendConfigFilename);
 		Scanner in = new Scanner(f);
 		Scanner s = null;
 		while (in.hasNextLine()) {
@@ -107,10 +110,10 @@ public class Board {
 			s.useDelimiter(",");
 			String buffer = s.next();
 			if (buffer.length() > 1) //exception if legend is more than one letter initial
-				throw new BadConfigFormatException(legendName);
+				throw new BadConfigFormatException(legendConfigFilename);
 			Character key = buffer.charAt(0); //grabs first character
 			if (!(s.hasNext())) //exception if there's more information
-				throw new BadConfigFormatException(legendName);
+				throw new BadConfigFormatException(legendConfigFilename);
 			String value = s.next().trim(); //cuts off spaces (safety feature)
 			rooms.put(key, value);
 		}

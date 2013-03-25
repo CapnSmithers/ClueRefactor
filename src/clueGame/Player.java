@@ -1,19 +1,20 @@
 package clueGame;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 public class Player {
-	private String playerName;
-	private String color;
+	private String playerName, colorStr;
+	private Color color;
 	private int startingLocation;
 	private int currentLocation;
-	
 	protected ArrayList<Card> myCards;
 	
 	//For testing only
 	public Player() {
 		this.playerName = "Professor Plum";
-		this.color = "purple";
+		this.colorStr = "purple";
+		this.color = convertColor(this.colorStr);
 		this.startingLocation = (16*23);
 		this.currentLocation = this.startingLocation;
 		this.myCards = new ArrayList<Card>();
@@ -22,7 +23,8 @@ public class Player {
 	public Player(String playerName, String color, Integer startingLocation) {
 		super();
 		this.playerName = playerName;
-		this.color = color;
+		this.colorStr = color;
+		this.color = convertColor(this.colorStr);
 		this.startingLocation = startingLocation;
 		this.currentLocation = this.startingLocation;
 		this.myCards = new ArrayList<Card>();
@@ -30,6 +32,22 @@ public class Player {
 	
 	public Card disproveSuggestion(Card person, Card room, Card weapon) {
 		return null;
+	}
+	
+	private Color convertColor(String strColor) {
+		Color color; 
+		try {     
+			// We can use reflection to convert the string to a color
+			java.lang.reflect.Field field = Class.forName("java.awt.Color").getField(strColor.trim());     
+			color = (Color)field.get(null); } 
+		catch (Exception e) {  
+			color = null; // Not defined } 
+		}
+		return color;
+	}
+	
+	public void addCard(Card c) {
+		myCards.add(c);
 	}
 
 	/*
@@ -43,12 +61,16 @@ public class Player {
 		this.playerName = playerName;
 	}
 
-	public String getColor() {
+	public Color getColor() {
 		return color;
 	}
 
-	public void setColor(String color) {
+	public void setColor(Color color) {
 		this.color = color;
+	}
+	
+	public String getColorStr() {
+		return colorStr;
 	}
 
 	public Integer getStartingLocation() {
