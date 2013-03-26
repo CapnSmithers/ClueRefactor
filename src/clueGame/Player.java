@@ -2,6 +2,7 @@ package clueGame;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Player {
 	private String playerName, colorStr;
@@ -31,7 +32,21 @@ public class Player {
 	}
 	
 	public Card disproveSuggestion(Card person, Card room, Card weapon) {
-		return null;
+		//check for any unrevealed cards that match
+		ArrayList<Card> possibilities = new ArrayList<Card>();
+		for (Card c : myCards) {
+			if (c.equals(person) || c.equals(room) || c.equals(weapon)) {
+				if (!c.isHasBeenRevealed()) {		
+					possibilities.add(c);
+				}
+			}
+		}
+        
+		//choose random possibility
+        Collections.shuffle(possibilities);
+        if (possibilities.size() <= 0) //no unrevealed cards
+        	return null;
+        return possibilities.get(0);
 	}
 	
 	private Color convertColor(String strColor) {

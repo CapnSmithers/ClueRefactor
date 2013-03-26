@@ -135,33 +135,33 @@ public class GameActionTest {
 		ComputerPlayer compPlayer = new ComputerPlayer();
 		compPlayer.setLastRoomVisited('A');
 		//Location with previously visited door
-		board.calcTargets(20,11,1);
+		board.calcTargets(19, 11, 1);
 		int previousRoom = 0;
-		int location21_11 = 0;
-		int location20_10 = 0;
-		int location20_12 = 0;
+		int location20_11 = 0;
+		int location19_10 = 0;
+		int location19_12 = 0;
 		int other = 0;
 		for(int i = 0; i < 50; i++) {
 			BoardCell selected = compPlayer.pickLocation(board.getTargets());
-			if(selected == board.getCellAt(19, 11)) {
+			if (selected == board.getCellAt(18, 11)) {
 				previousRoom++;
-			} else if (selected == board.getCellAt(21, 11)) {
-				location21_11++;
-			} else if (selected == board.getCellAt(20, 10)) {
-				location20_10++;
-			} else if (selected == board.getCellAt(20, 12)) {
-				location20_12++;
+			} else if (selected == board.getCellAt(20, 11)) {
+				location20_11++;
+			} else if (selected == board.getCellAt(19, 10)) {
+				location19_10++;
+			} else if (selected == board.getCellAt(19, 12)) {
+				location19_12++;
 			}
 			else {
 				other++;
 			}
 		}
 		//Player should randomly select between all avaliable locations
-		assertEquals(50, location21_11+location20_10+location20_12+previousRoom+other);
+		assertEquals(50, location20_11+location19_10+location19_12+previousRoom+other);
 		assertTrue(previousRoom > 5);
-		assertTrue(location20_10 > 5);
-		assertTrue(location20_12 > 5);
-		assertTrue(location21_11 > 5);
+		assertTrue(location20_11 > 5);
+		assertTrue(location19_10 > 5);
+		assertTrue(location19_12 > 5);
 		assertTrue(other == 0);
 	}
 	
@@ -327,19 +327,20 @@ public class GameActionTest {
 		}
 		
 		//establish test - set players, board, player 1 location, and make it player 1's turn
-		int ballroomCell = board.calcIndex(8, 1);	
+		int billiardsCell = board.calcIndex(8, 1);	
 		game.board = board;
 		game.players = players;
-		game.players.get(1).setCurrentLocation(ballroomCell);
+		game.players.get(1).setCurrentLocation(billiardsCell);
 		game.curPlayerTurn = 1;
+		game.setCards(deck);
 		
 		//creates suggestion for current player (player 1)
 		Solution suggestion = game.createSuggestion();
 		
 		//result should be current room (ballroom), personSuggestion, and weaponSuggestion
 		Assert.assertEquals(personSuggestion, new Card(suggestion.person, Card.CardType.PERSON));
-		Assert.assertEquals(weaponSuggestion, new Card(suggestion.person, Card.CardType.WEAPON));
-		Assert.assertEquals(roomSuggestion, new Card("Ballroom", Card.CardType.ROOM));
+		Assert.assertEquals(weaponSuggestion, new Card(suggestion.weapon, Card.CardType.WEAPON));
+		Assert.assertEquals("Billiards Room", suggestion.room);
 	}
 
 	//Tests to make sure that a computer player does not make a suggestion using any cards that has already

@@ -149,12 +149,58 @@ public class ClueGame {
 	}
 	
 	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson) {
-		return null;
+		Card personCard = new Card(person, Card.CardType.PERSON);
+		Card weaponCard = new Card(weapon, Card.CardType.WEAPON);
+		Card roomCard = new Card(room, Card.CardType.ROOM);
+		
+		//built list of possible cards to return. they may not come from players that are making the accusation
+		ArrayList<Card> possibilities = new ArrayList<Card>();
+		for (Player p : players) {
+			Card c = p.disproveSuggestion(personCard, weaponCard, roomCard);
+			
+			if (c != null && accusingPerson.getPlayerName() != p.getPlayerName()) {
+				possibilities.add(c);
+			}
+		}
+		
+		//choose random possibility
+        if (possibilities.size() <= 0) //no possible cards
+        	return null;
+        Collections.shuffle(possibilities);
+        return possibilities.get(0);
 	}
 	
 	public Solution createSuggestion() {
 		//create a suggestion for the current player
-		return new Solution("", "", "");
+		
+		Player p = players.get(curPlayerTurn);
+		RoomCell rc = (RoomCell) board.getRoomCellAt(p.getCurrentLocation());
+		String roomName = board.getRoomName(rc.getInitial());
+		
+		ArrayList<Card> person_possibilities = new ArrayList<Card>();
+		ArrayList<Card> weapon_possibilities = new ArrayList<Card>();
+		for (Card c : cards) {
+			if (!c.isHasBeenRevealed()) {
+				if (c.getCardType() == Card.CardType.PERSON) {
+					person_possibilities.add(c);
+				}
+				if (c.getCardType() == Card.CardType.WEAPON) {
+					weapon_possibilities.add(c);
+				}
+			}
+		}
+		
+		if (person_possibilities.size() <= 0 || weapon_possibilities.size() <= 0)
+        	return null;
+		
+		Collections.shuffle(person_possibilities);
+		Collections.shuffle(weapon_possibilities);
+		
+		Card personCard = person_possibilities.get(0);
+		Card weaponCard = weapon_possibilities.get(0);
+		Card roomCard = new Card(roomName, Card.CardType.ROOM);
+		
+		return new Solution(personCard, weaponCard, roomCard);
 	}
 	
 	public boolean checkAccusation(Solution proposed) {

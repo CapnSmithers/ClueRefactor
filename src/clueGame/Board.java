@@ -279,6 +279,10 @@ public class Board {
 		return rooms;
 	}
 	
+	public String getRoomName(Character key) {
+		return rooms.get(key);
+	}
+	
 	public int getNumRows() {
 		return numRows;
 	}
