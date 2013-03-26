@@ -66,7 +66,7 @@ public class Card {
 		Iterator<Card> it = myCards.iterator();
         while (it.hasNext()) {
         	Card c = it.next();
-            if(c != null && c.cardType == ct){
+            if(c != null && c.cardType == ct) {
             	possibilities.add(c);
             }
         }

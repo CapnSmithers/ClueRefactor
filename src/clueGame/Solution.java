@@ -29,4 +29,10 @@ public class Solution {
 		
 		return false;
 	}
+	
+	public boolean matches(Solution s) {
+		return (s.person == this.person &&
+				s.weapon == this.weapon &&
+				s.room == this.room);
+	}
 }

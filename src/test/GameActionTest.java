@@ -32,10 +32,8 @@ public class GameActionTest {
 	
 	@BeforeClass
 	public static void setup() {
-		board = new Board();
-		board.loadConfigFiles();
 		game = new ClueGame();
-		game.deal();
+		board = game.board;
 		testSolution = game.setSolution();  //testSolution is set to Col Mustard, Revolver, Ballroom
 		wrongSolution = game.setWrongSolution();
 		personSuggestion = new Card("Miss Scarlet", Card.CardType.PERSON);
@@ -57,28 +55,33 @@ public class GameActionTest {
 	public void checkTargetRandomLocation() {
 		ComputerPlayer compPlayer = new ComputerPlayer();
 		//Location with no doors
-		board.calcTargets(16, 2, 2);
-		int location16_0 = 0;
-		int location15_1 = 0;
-		int location15_3 = 0;
-		int location16_4 = 0;
-		for(int i = 0; i > 100; i++) {
+		board.calcTargets(15, 2, 2);
+		int location15_0 = 0;
+		int location14_1 = 0;
+		int location14_3 = 0;
+		int location15_4 = 0;
+		int other = 0;
+		for(int i = 0; i < 100; i++) {
 			BoardCell selected = compPlayer.pickLocation(board.getTargets());
-			if(selected == board.getCellAt(16, 0)) {
-				location16_0++;
-			} else if (selected == board.getCellAt(15,1)) {
-				location15_1++;
-			} else if (selected == board.getCellAt(15, 3)) {
-				location15_3++;
-			} else {
-				location16_4++;
+			if(selected == board.getCellAt(15, 0)) {
+				location15_0++;
+			} else if (selected == board.getCellAt(14, 1)) {
+				location14_1++;
+			} else if (selected == board.getCellAt(14, 3)) {
+				location14_3++;
+			} else if (selected == board.getCellAt(15, 4)) {
+				location15_4++;
+			}
+			else {
+				other++;
 			}
 		}
-		assertEquals(100, location16_0+location15_1+location15_3+location16_4);
-		assertTrue(location16_0 > 12);
-		assertTrue(location16_4 > 12);
-		assertTrue(location15_1 > 12);
-		assertTrue(location15_3 > 12);
+		assertEquals(100, location15_0+location14_1+location14_3+location15_4+other);
+		assertTrue(location15_0 > 12);
+		assertTrue(location14_1 > 12);
+		assertTrue(location14_3 > 12);
+		assertTrue(location15_4 > 12);
+		assertTrue(other == 0);		
 	}
 	
 	//Tests for location selection when a room that hasn't been visited is present
@@ -87,12 +90,12 @@ public class GameActionTest {
 	public void checkTargetRoomLocation() {
 		ComputerPlayer compPlayer = new ComputerPlayer();
 		//Location with 1 door
-		board.calcTargets(18, 5, 3);
+		board.calcTargets(17, 5, 3);
 		int doorLocation = 0;
 		int otherLocation = 0;
-		for(int i = 0; i > 10; i++) {
+		for(int i = 0; i < 10; i++) {
 			BoardCell selected = compPlayer.pickLocation(board.getTargets());
-			if (selected == board.getCellAt(20, 4)) {
+			if (selected == board.getCellAt(19, 4)) {
 				doorLocation++;
 			} else {
 				otherLocation++;
@@ -108,11 +111,11 @@ public class GameActionTest {
 		int door1Location = 0;
 		int door2Location = 0;
 		int otherSelection = 0;
-		for(int i = 0; i > 30; i++) {
+		for(int i = 0; i < 30; i++) {
 			BoardCell selected = compPlayer.pickLocation(board.getTargets());
-			if (selected == board.getCellAt(16, 20)) {
+			if (selected == board.getCellAt(15, 20)) {
 				door1Location++;
-			} else if (selected == board.getCellAt(20,20)) {
+			} else if (selected == board.getCellAt(19, 20)) {
 				door2Location++;
 			} else {
 				otherSelection++;
@@ -137,24 +140,29 @@ public class GameActionTest {
 		int location21_11 = 0;
 		int location20_10 = 0;
 		int location20_12 = 0;
-		for(int i = 0; i > 50; i++) {
+		int other = 0;
+		for(int i = 0; i < 50; i++) {
 			BoardCell selected = compPlayer.pickLocation(board.getTargets());
-			if(selected == board.getCellAt(19,11)) {
+			if(selected == board.getCellAt(19, 11)) {
 				previousRoom++;
-			} else if (selected == board.getCellAt(21,11)) {
+			} else if (selected == board.getCellAt(21, 11)) {
 				location21_11++;
 			} else if (selected == board.getCellAt(20, 10)) {
 				location20_10++;
-			} else {
+			} else if (selected == board.getCellAt(20, 12)) {
 				location20_12++;
+			}
+			else {
+				other++;
 			}
 		}
 		//Player should randomly select between all avaliable locations
-		assertEquals(50, location21_11+location20_10+location20_12+previousRoom);
+		assertEquals(50, location21_11+location20_10+location20_12+previousRoom+other);
 		assertTrue(previousRoom > 5);
 		assertTrue(location20_10 > 5);
 		assertTrue(location20_12 > 5);
 		assertTrue(location21_11 > 5);
+		assertTrue(other == 0);
 	}
 	
 	//Tests disproveSuggestion for one player when they have only one card to show

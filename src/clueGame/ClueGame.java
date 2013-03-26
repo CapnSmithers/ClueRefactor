@@ -157,8 +157,8 @@ public class ClueGame {
 		return new Solution("", "", "");
 	}
 	
-	public boolean checkAccusation(Solution solution) {
-		return false;
+	public boolean checkAccusation(Solution proposed) {
+		return solution.matches(proposed);
 	}
 	
 	/*
@@ -218,7 +218,7 @@ public class ClueGame {
 	}
 
 	public Solution setSolution() {
-		Solution solution = new Solution("Colonel Mustard", "Revolver", "Ballroom");
+		solution = new Solution("Colonel Mustard", "Revolver", "Ballroom");
 		return solution;				
 	}
 	

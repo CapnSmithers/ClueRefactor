@@ -1,5 +1,8 @@
 package clueGame;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.Set;
 
 public class ComputerPlayer extends Player {
@@ -16,7 +19,31 @@ public class ComputerPlayer extends Player {
 	}
 
 	public BoardCell pickLocation(Set<BoardCell> targets) {
-		return null;	
+		//pick random location
+		
+		//check for doorways. if there are doors, computer should always go to them
+		ArrayList<BoardCell> possibilities = new ArrayList<BoardCell>();
+		for (BoardCell c : targets) {
+			if (c.isDoorway()) {
+				RoomCell d = (RoomCell) c;
+				if (this.lastRoomVisited != d.getInitial()) {
+					possibilities.add(c);
+				}
+			}
+		}
+		
+		if (possibilities.size() <= 0) {
+			//no doors, use walkways instead
+			for (BoardCell c : targets) {
+	            possibilities.add(c);
+	        }
+		}
+        
+		//choose random possibility
+        Collections.shuffle(possibilities);
+        if (possibilities.size() <= 0)
+        	return null;
+        return possibilities.get(0);
 	}
 	
 	public void createSuggestion() {

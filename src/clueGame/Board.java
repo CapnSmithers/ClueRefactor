@@ -33,6 +33,7 @@ public class Board {
 		targets = new HashSet<BoardCell>();
 		
 		loadConfigFiles();
+		calcAdjacencies();
 	}
 	
 	public Board(String mapName, String legendName) { //instantiator with filenames
@@ -45,6 +46,7 @@ public class Board {
 		targets = new HashSet<BoardCell>();
 		
 		loadConfigFiles();
+		calcAdjacencies();
 	}
 	
 	public void loadConfigFiles() { //loads legend, then board, calcs adjacencies
