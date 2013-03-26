@@ -114,9 +114,11 @@ public class Board {
 			if (buffer.length() > 1) //exception if legend is more than one letter initial
 				throw new BadConfigFormatException(legendConfigFilename);
 			Character key = buffer.charAt(0); //grabs first character
-			if (!(s.hasNext())) //exception if there's more information
+			if (!(s.hasNext())) //exception if there's a lack of information
 				throw new BadConfigFormatException(legendConfigFilename);
 			String value = s.next().trim(); //cuts off spaces (safety feature)
+			if (s.hasNext()) //exception if there's extra information
+				throw new BadConfigFormatException(legendConfigFilename);
 			rooms.put(key, value);
 		}
 		in.close();
