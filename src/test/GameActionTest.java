@@ -8,6 +8,7 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -30,8 +31,8 @@ public class GameActionTest {
 	static Card roomSuggestion = null;
 	static Card weaponSuggestion = null;
 	
-	@BeforeClass
-	public static void setup() {
+	@Before
+	public void setup() {
 		game = new ClueGame();
 		board = game.board;
 		testSolution = game.setSolution();  //testSolution is set to Col Mustard, Revolver, Ballroom
@@ -141,7 +142,7 @@ public class GameActionTest {
 		int location19_10 = 0;
 		int location19_12 = 0;
 		int other = 0;
-		for(int i = 0; i < 50; i++) {
+		for(int i = 0; i < 100; i++) {
 			BoardCell selected = compPlayer.pickLocation(board.getTargets());
 			if (selected == board.getCellAt(18, 11)) {
 				previousRoom++;
@@ -157,7 +158,7 @@ public class GameActionTest {
 			}
 		}
 		//Player should randomly select between all avaliable locations
-		assertEquals(50, location20_11+location19_10+location19_12+previousRoom+other);
+		assertEquals(100, location20_11+location19_10+location19_12+previousRoom+other);
 		assertTrue(previousRoom > 5);
 		assertTrue(location20_11 > 5);
 		assertTrue(location19_10 > 5);
@@ -234,17 +235,12 @@ public class GameActionTest {
 	//Tests to ensure that disproveSuggestion works for multiple players
 	@Test
 	public void disproveSuggestionMultiplePlayers() {
-		//Populate players
-		ArrayList<Player> players = new ArrayList<Player>();
-		players.add(new HumanPlayer("Colonel Mustard", "Yellow", 0));
-		for(int i = 0; i < 3; i++) {
-			players.add(new ComputerPlayer());   //Adds 3 computer players on top of the one human player
-		}
-		
 		//Assign players specific cards
 		ArrayList<Card> p1Cards = new ArrayList<Card>();
 		ArrayList<Card> p2Cards = new ArrayList<Card>();
 		ArrayList<Card> p3Cards = new ArrayList<Card>();
+		ArrayList<Card> p4Cards = new ArrayList<Card>();
+		ArrayList<Card> p5Cards = new ArrayList<Card>();
 		ArrayList<Card> humanCards = new ArrayList<Card>();
 		
 		p1Cards.add(new Card("Knife", Card.CardType.WEAPON));
@@ -253,25 +249,45 @@ public class GameActionTest {
 		p2Cards.add(new Card("Ballroom", Card.CardType.ROOM));
 		p3Cards.add(new Card("Lead Pipe", Card.CardType.WEAPON));
 		p3Cards.add(new Card("Gallery", Card.CardType.ROOM));
+		p4Cards.add(new Card("AA", Card.CardType.WEAPON));
+		p4Cards.add(new Card("BB", Card.CardType.ROOM));
+		p5Cards.add(new Card("CC", Card.CardType.WEAPON));
+		p5Cards.add(new Card("DD", Card.CardType.ROOM));
 		humanCards.add(new Card("Mr. Green", Card.CardType.PERSON));
 		humanCards.add(new Card("Conservatory", Card.CardType.ROOM));
 		
-		players.get(0).setMyCards(humanCards);
-		players.get(1).setMyCards(p1Cards);
-		players.get(2).setMyCards(p2Cards);
-		players.get(3).setMyCards(p3Cards);
+		//set players cards
+		game.players.get(0).setMyCards(humanCards);
+		game.players.get(1).setMyCards(p1Cards);
+		game.players.get(2).setMyCards(p2Cards);
+		game.players.get(3).setMyCards(p3Cards);
+		game.players.get(4).setMyCards(p4Cards);
+		game.players.get(5).setMyCards(p5Cards);
 		
-		//set game players to list defined above
-		game.players = players;
+		Set<Card> deck = new HashSet<Card>();
+		deck.add(p1Cards.get(0));
+		deck.add(p1Cards.get(1));
+		deck.add(p2Cards.get(0));
+		deck.add(p2Cards.get(1));
+		deck.add(p3Cards.get(0));
+		deck.add(p3Cards.get(1));
+		deck.add(p4Cards.get(0));
+		deck.add(p4Cards.get(1));
+		deck.add(p5Cards.get(0));
+		deck.add(p5Cards.get(1));
+		deck.add(humanCards.get(0));
+		deck.add(humanCards.get(1));
+		
+		game.setCards(deck);
 		
 		//no one can disprove - null should be returned
-		Assert.assertNull(game.handleSuggestion("Mrs. White", "Bathroom", "Rope", players.get(2)));
+		Assert.assertNull(game.handleSuggestion("Mrs. White", "Rope", "Bathroom", game.players.get(2)));
 		//only the human player can disprove - Mr. Green should be returned
-		Assert.assertEquals(new Card("Mr. Green", Card.CardType.PERSON), game.handleSuggestion("Mr. Green", "Bathroom", "Rope", players.get(2)));
+		Assert.assertEquals(new Card("Mr. Green", Card.CardType.PERSON), game.handleSuggestion("Mr. Green", "Rope", "Bathroom", game.players.get(2)));
 		//only the human player can disprove, but the human player is making the accusation - null should be returned
-		Assert.assertNull(game.handleSuggestion("Mr. Green", "Bathroom", "Rope", players.get(0)));
+		Assert.assertNull(game.handleSuggestion("Mr. Green", "Rope", "Bathroom", game.players.get(0)));
 		//only computer player 2 can disprove, but that player is making the accusation - null should be returned
-		Assert.assertNull(game.handleSuggestion("Mrs. White", "Ballroom", "Rope", players.get(2)));
+		Assert.assertNull(game.handleSuggestion("Mrs. White", "Rope", "Ballroom", game.players.get(2)));
 	
 		int room = 0;
 		int weapon = 0;
@@ -279,19 +295,19 @@ public class GameActionTest {
 		int other = 0;
 		//situation where two players can disprove. Make sure same player isn't queried each time 
 		//and same card isn't returned each time
-		for (int i = 0; i < 30; i++) {
-			Card suggestion = game.handleSuggestion("Mr. Green", "Gallery", "Rope", players.get(1));
-			if (suggestion == new Card("Mr. Green", Card.CardType.PERSON)) {
+		for (int i = 0; i < 50; i++) {
+			Card suggestion = game.handleSuggestion("Mr. Green", "Rope", "Gallery", game.players.get(1));
+			if (suggestion.equals(new Card("Mr. Green", Card.CardType.PERSON))) {
 				person++;
-			} else if (suggestion == new Card("Gallery", Card.CardType.ROOM)) {
+			} else if (suggestion.equals(new Card("Gallery", Card.CardType.ROOM))) {
 				room++;
-			} else if (suggestion == new Card("Rope", Card.CardType.WEAPON)) {
+			} else if (suggestion.equals(new Card("Rope", Card.CardType.WEAPON))) {
 				weapon++;
 			} else {
 				other++;
 			}
 		}
-		assertEquals(30, weapon+person+room+other);
+		assertEquals(50, weapon+person+room+other);
 		assertTrue(person > 1);
 		assertTrue(room > 1);
 		assertTrue(weapon == 0);
@@ -379,6 +395,7 @@ public class GameActionTest {
 		game.players = players;
 		game.players.get(1).setCurrentLocation(ballroomCell);
 		game.curPlayerTurn = 1;
+		game.setCards(deck);
 		
 		//make sure each person is used at least once and single weapon is used every time
 		int person1 = 0;

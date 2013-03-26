@@ -1,1 +1,1 @@
-ClueLayoutBadColumns.csv is in an invalid format. Check the document.
+An input file is in an invalid format. Check the documents.

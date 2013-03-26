@@ -31,7 +31,7 @@ public class Player {
 		this.myCards = new ArrayList<Card>();
 	}
 	
-	public Card disproveSuggestion(Card person, Card room, Card weapon) {
+	public Card disproveSuggestion(Card person, Card weapon, Card room) {
 		//check for any unrevealed cards that match
 		ArrayList<Card> possibilities = new ArrayList<Card>();
 		for (Card c : myCards) {
@@ -43,9 +43,9 @@ public class Player {
 		}
         
 		//choose random possibility
-        Collections.shuffle(possibilities);
         if (possibilities.size() <= 0) //no unrevealed cards
         	return null;
+        Collections.shuffle(possibilities);
         return possibilities.get(0);
 	}
 	

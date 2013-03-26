@@ -148,7 +148,7 @@ public class ClueGame {
 		solution = new Solution(personCard, weaponCard, roomCard);
 	}
 	
-	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson) {
+	public Card handleSuggestion(String person, String weapon, String room, Player accusingPerson) {
 		Card personCard = new Card(person, Card.CardType.PERSON);
 		Card weaponCard = new Card(weapon, Card.CardType.WEAPON);
 		Card roomCard = new Card(room, Card.CardType.ROOM);
@@ -158,7 +158,7 @@ public class ClueGame {
 		for (Player p : players) {
 			Card c = p.disproveSuggestion(personCard, weaponCard, roomCard);
 			
-			if (c != null && accusingPerson.getPlayerName() != p.getPlayerName()) {
+			if (c != null && (accusingPerson.getPlayerName() != p.getPlayerName())) {
 				possibilities.add(c);
 			}
 		}
