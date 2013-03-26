@@ -1,5 +1,9 @@
 package clueGame;
 
+import gui.ControlGUI;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -9,9 +13,11 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JFrame;
+
 import clueGame.Card.CardType;
 
-public class ClueGame {
+public class ClueGame extends JFrame {
 	private String playerConfigFilename, weaponConfigFilename;
 	private String mapConfigFilename, legendConfigFilename; //csv file with board initials; txt with legend file info
 	private Set<Card> cards;
@@ -23,6 +29,11 @@ public class ClueGame {
 	public Board board;
 	
 	public ClueGame() {
+		//Initialize JFrame object
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Clue");
+		setSize(new Dimension(1300, 850));
+		
 		playerConfigFilename = "playerConfig.txt"; //default player config name
 		weaponConfigFilename = "weaponConfig.txt"; //default weapon config name
 		
@@ -32,7 +43,7 @@ public class ClueGame {
 		weapons = new ArrayList<String>();
 		solution = new Solution("", "", "");
 		
-		createGame(0);
+		createGame(0);  
 	}
 	
 	public ClueGame(String mapFname, String legendFname, String playerFname, String weaponFname) {
@@ -51,6 +62,10 @@ public class ClueGame {
 	}
 	
 	public void createGame(int humanPlayerIndex) {	
+		//Adds GUI components to JFrame
+		ControlGUI controlGUI = new ControlGUI();
+		add(controlGUI, BorderLayout.SOUTH);
+		
 		//load players and weapons
 		loadConfigFiles(humanPlayerIndex);
 		curPlayerTurn = 0;
@@ -205,6 +220,12 @@ public class ClueGame {
 	
 	public boolean checkAccusation(Solution proposed) {
 		return solution.matches(proposed);
+	}
+	
+	//Main function to display board
+	public static void main(String[] args) {
+		ClueGame game = new ClueGame();
+		game.setVisible(true);
 	}
 	
 	/*

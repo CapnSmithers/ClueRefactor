@@ -1,5 +1,6 @@
 package clueGame;
 
+import java.awt.Graphics;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -10,9 +11,11 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JPanel;
+
 import clueGame.RoomCell.DoorDirection;
 
-public class Board {
+public class Board extends JPanel {
 	
 	private ArrayList<BoardCell> cells; //stores board
 	private Map<Character, String> rooms; //legend codes
@@ -34,6 +37,7 @@ public class Board {
 		
 		loadConfigFiles();
 		calcAdjacencies();
+		paintComponent();
 	}
 	
 	public Board(String mapName, String legendName) { //instantiator with filenames
@@ -47,6 +51,14 @@ public class Board {
 		
 		loadConfigFiles();
 		calcAdjacencies();
+	}
+	
+	public void paintComponent() {
+		Graphics g = null;
+		//Iterates through every cell, calls cell draw function
+		for(BoardCell c: cells) {
+			c.draw(g, this);
+		}
 	}
 	
 	public void loadConfigFiles() { //loads legend, then board, calcs adjacencies

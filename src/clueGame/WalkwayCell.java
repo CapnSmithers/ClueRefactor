@@ -1,5 +1,7 @@
 package clueGame;
 
+import java.awt.Graphics;
+
 public class WalkwayCell extends BoardCell {
 	
 	public WalkwayCell(int row, int col) {
@@ -12,7 +14,7 @@ public class WalkwayCell extends BoardCell {
 	}
 	
 	@Override
-	public void draw() {
+	public void draw(Graphics g, Board b) {
 		
 	}
 }
