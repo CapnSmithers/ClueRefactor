@@ -1,6 +1,8 @@
 package clueGame;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ public class Board extends JPanel {
 	
 	private ArrayList<BoardCell> cells; //stores board
 	private Map<Character, String> rooms; //legend codes
+	private Map<String, Point> roomPositions; //room name positions
 	private Map<Integer, LinkedList<Integer>> adjMtx; //adjacency list
 	private Set<BoardCell> targets; //list of targets- gets cleared for every new calcTargets
 	private boolean[] visited; //visited matrix
@@ -32,12 +35,12 @@ public class Board extends JPanel {
 		//initializations
 		cells = new ArrayList<BoardCell>(); 
 		rooms = new HashMap<Character, String>();
+		roomPositions = new HashMap<String, Point>();
 		adjMtx = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new HashSet<BoardCell>();
 		
 		loadConfigFiles();
 		calcAdjacencies();
-		paintComponent();
 	}
 	
 	public Board(String mapName, String legendName) { //instantiator with filenames
@@ -46,6 +49,7 @@ public class Board extends JPanel {
 		//initializations
 		cells = new ArrayList<BoardCell>();
 		rooms = new HashMap<Character, String>();
+		roomPositions = new HashMap<String, Point>();
 		adjMtx = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new HashSet<BoardCell>();
 		
@@ -53,11 +57,17 @@ public class Board extends JPanel {
 		calcAdjacencies();
 	}
 	
-	public void paintComponent() {
-		Graphics g = null;
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		//Iterates through every cell, calls cell draw function
 		for(BoardCell c: cells) {
 			c.draw(g, this);
+		}
+		g.setColor(Color.blue);
+		for(Map.Entry<String, Point> entry: roomPositions.entrySet()) {
+			Point p = entry.getValue();
+			String roomName = entry.getKey();
+			g.drawString(roomName, (int) p.getX(), (int) p.getY());
 		}
 	}
 	
@@ -129,9 +139,19 @@ public class Board extends JPanel {
 			if (!(s.hasNext())) //exception if there's a lack of information
 				throw new BadConfigFormatException(legendConfigFilename);
 			String value = s.next().trim(); //cuts off spaces (safety feature)
+			
+			if (!(s.hasNext())) //exception if there's a lack of information
+				throw new BadConfigFormatException(legendConfigFilename);
+			Integer x = s.nextInt(); //cuts off spaces (safety feature)
+			
+			if (!(s.hasNext())) //exception if there's a lack of information
+				throw new BadConfigFormatException(legendConfigFilename);
+			Integer y = s.nextInt(); //cuts off spaces (safety feature)
+			
 			if (s.hasNext()) //exception if there's extra information
 				throw new BadConfigFormatException(legendConfigFilename);
 			rooms.put(key, value);
+			roomPositions.put(value, new Point(x,y));
 		}
 		in.close();
 	}
@@ -266,6 +286,14 @@ public class Board extends JPanel {
 	
 	public int calcIndex(int row, int col) { //calculates location index from row/col
 		return row * numColumns + col;
+	}
+	
+	public int indexToPixelRow(int index) {
+		return index/numColumns;
+	}
+	
+	public int indexToPixelCol(int index) {
+		return index%numColumns;
 	}
 	
 	public RoomCell getRoomCellAt(int row, int col) { //gets cell if it's room, otherwise gives null

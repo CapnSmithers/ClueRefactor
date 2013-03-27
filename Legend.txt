@@ -1,11 +1,11 @@
-G, Gallery
-B, Billiards Room
-L, Library
-E, Bedroom
-W, Wine Cellar
-A, Ballroom
-T, Bathroom
-C, Conservatory
-K, Kitchen
-P, Pantry
-H, Hallway
+G, Gallery,50,100
+B, Billiards Room,50,300
+L, Library,50,630
+E, Bedroom,300,50
+W, Wine Cellar,300,300
+A, Ballroom,270,500
+T, Bathroom,300,660
+C, Conservatory,570,50
+K, Kitchen,570,350
+P, Pantry,570,600
+H, Hallway,0,0

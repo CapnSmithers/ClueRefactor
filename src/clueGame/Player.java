@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -10,6 +11,8 @@ public class Player {
 	private int startingLocation;
 	private int currentLocation;
 	protected ArrayList<Card> myCards;
+	
+	public static final int RADIUS = BoardCell.DIM/2;
 	
 	//For testing only
 	public Player() {
@@ -63,6 +66,15 @@ public class Player {
 	
 	public void addCard(Card c) {
 		myCards.add(c);
+	}
+	
+	public void draw(Graphics g, Board b) {
+		g.setColor(color);
+		g.fillOval(b.indexToPixelCol(currentLocation), b.indexToPixelRow(currentLocation),
+				RADIUS, RADIUS);
+		g.setColor(Color.black);
+		g.drawOval(b.indexToPixelCol(currentLocation), b.indexToPixelRow(currentLocation),
+				RADIUS, RADIUS);
 	}
 
 	/*

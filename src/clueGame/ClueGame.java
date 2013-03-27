@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import clueGame.Card.CardType;
 
 public class ClueGame extends JFrame {
+	
 	private String playerConfigFilename, weaponConfigFilename;
 	private String mapConfigFilename, legendConfigFilename; //csv file with board initials; txt with legend file info
 	private Set<Card> cards;
@@ -27,12 +28,14 @@ public class ClueGame extends JFrame {
 	public int curPlayerTurn;
 	private Solution solution;
 	public Board board;
+	public static final int WINDOW_HEIGHT = 850;
+	public static final int WINDOW_WIDTH = 1200;	
 	
 	public ClueGame() {
 		//Initialize JFrame object
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Clue");
-		setSize(new Dimension(1300, 850));
+		setSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 		
 		playerConfigFilename = "playerConfig.txt"; //default player config name
 		weaponConfigFilename = "weaponConfig.txt"; //default weapon config name
@@ -65,6 +68,7 @@ public class ClueGame extends JFrame {
 		//Adds GUI components to JFrame
 		ControlGUI controlGUI = new ControlGUI();
 		add(controlGUI, BorderLayout.SOUTH);
+		add(board, BorderLayout.CENTER);
 		
 		//load players and weapons
 		loadConfigFiles(humanPlayerIndex);
