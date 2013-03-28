@@ -12,7 +12,7 @@ public class Player {
 	private int currentLocation;
 	protected ArrayList<Card> myCards;
 	
-	public static final int RADIUS = BoardCell.DIM/2;
+	public static final int DIM = BoardCell.DIM;
 	
 	//For testing only
 	public Player() {
@@ -71,10 +71,10 @@ public class Player {
 	public void draw(Graphics g, Board b) {
 		g.setColor(color);
 		g.fillOval(b.indexToPixelCol(currentLocation), b.indexToPixelRow(currentLocation),
-				RADIUS, RADIUS);
+				DIM, DIM);
 		g.setColor(Color.black);
 		g.drawOval(b.indexToPixelCol(currentLocation), b.indexToPixelRow(currentLocation),
-				RADIUS, RADIUS);
+				DIM, DIM);
 	}
 
 	/*

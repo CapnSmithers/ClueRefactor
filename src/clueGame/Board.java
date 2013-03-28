@@ -23,16 +23,18 @@ public class Board extends JPanel {
 	private Map<Character, String> rooms; //legend codes
 	private Map<String, Point> roomPositions; //room name positions
 	private Map<Integer, LinkedList<Integer>> adjMtx; //adjacency list
+	private ArrayList<Player> players;
 	private Set<BoardCell> targets; //list of targets- gets cleared for every new calcTargets
 	private boolean[] visited; //visited matrix
 	private int numRows;
 	private int numColumns;
 	private String mapConfigFileName, legendConfigFilename; //csv file with board initials; txt with legend file info
 	
-	public Board() {
+	public Board(ArrayList<Player> players) {
 		mapConfigFileName = "ClueMap.csv"; //default map name
 		legendConfigFilename = "legend.txt"; //default legend name
 		//initializations
+		this.players = players;
 		cells = new ArrayList<BoardCell>(); 
 		rooms = new HashMap<Character, String>();
 		roomPositions = new HashMap<String, Point>();
@@ -68,6 +70,9 @@ public class Board extends JPanel {
 			Point p = entry.getValue();
 			String roomName = entry.getKey();
 			g.drawString(roomName, (int) p.getX(), (int) p.getY());
+		}
+		for (Player p : players) {
+			p.draw(g, this);
 		}
 	}
 	
@@ -289,11 +294,11 @@ public class Board extends JPanel {
 	}
 	
 	public int indexToPixelRow(int index) {
-		return index/numColumns;
+		return BoardCell.DIM*(index/numColumns);
 	}
 	
 	public int indexToPixelCol(int index) {
-		return index%numColumns;
+		return BoardCell.DIM*(index%numColumns);
 	}
 	
 	public RoomCell getRoomCellAt(int row, int col) { //gets cell if it's room, otherwise gives null
