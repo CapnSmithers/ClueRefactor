@@ -1,9 +1,12 @@
 package clueGame;
 
 import gui.ControlGUI;
+import gui.NotesGUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -14,6 +17,9 @@ import java.util.Scanner;
 import java.util.Set;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import clueGame.Card.CardType;
 
@@ -33,6 +39,10 @@ public class ClueGame extends JFrame {
 	
 	public ClueGame() {
 		//Initialize JFrame object
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		menuBar.add(createMenuBar());
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Clue");
 		setSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
@@ -48,7 +58,7 @@ public class ClueGame extends JFrame {
 		
 		createGame(0);  
 	}
-	
+
 	public ClueGame(String mapFname, String legendFname, String playerFname, String weaponFname) {
 		mapConfigFilename = mapFname;
 		legendConfigFilename = legendFname;
@@ -93,6 +103,41 @@ public class ClueGame extends JFrame {
 		}
 	}
 	
+
+	//Creates menu bar objects in JFrame
+	private JMenu createMenuBar() {
+		JMenu menu = new JMenu("File"); 
+		menu.add(createFileExitItem());
+		menu.add(createDetectiveNotes());
+		return menu;
+
+	}
+
+	private JMenuItem createDetectiveNotes() {
+		JMenuItem item = new JMenuItem("Detective Notes");
+		class DetectiveNotesListener implements ActionListener {
+			public void actionPerformed(ActionEvent e) {
+				NotesGUI detectiveNotes = new NotesGUI();
+				detectiveNotes.setVisible(true);
+			}
+		}
+		item.addActionListener(new DetectiveNotesListener());
+		return item;
+	}
+
+	private JMenuItem createFileExitItem() {
+		JMenuItem item = new JMenuItem("Exit");
+		class MenuItemListener implements ActionListener {
+			public void actionPerformed(ActionEvent e)
+			{
+				System.exit(0);
+			}
+		}
+		item.addActionListener(new MenuItemListener());
+		return item;
+
+	}
+
 	private void createDeck() {
 		//use players array for players cards
 		for (Player p : players)

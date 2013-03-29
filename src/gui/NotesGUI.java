@@ -11,12 +11,23 @@ public class NotesGUI extends JDialog {
 		setTitle("Dectective Notes");
 		setSize(200, 300);
 		setLayout(new GridLayout(3, 2));
-		JPanel people = new JPanel();
-		JPanel pGuess = new JPanel();
-		JPanel rooms = new JPanel();
-		JPanel rGuess = new JPanel();
-		JPanel weapons = new JPanel();
-		JPanel wGuess = new JPanel();
+		
+		//Room, person and weapon checkbox panels are in their own classes
+		//Along with combo box panels
+		PeoplePanel people = new PeoplePanel();
+		WeaponPanel weapons = new WeaponPanel();
+		RoomPanel rooms = new RoomPanel();
+		PguessPanel pGuess = new PguessPanel();
+		RguessPanel rGuess = new RguessPanel();
+		WguessPanel wGuess = new WguessPanel();
+		
+		add(people);
+		add(pGuess);
+		add(weapons);
+		add(wGuess);
+		add(rooms);
+		add(rGuess);
+		
 	}
 
 }
