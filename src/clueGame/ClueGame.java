@@ -40,9 +40,9 @@ public class ClueGame extends JFrame {
 		playerConfigFilename = "playerConfig.txt"; //default player config name
 		weaponConfigFilename = "weaponConfig.txt"; //default weapon config name
 		
-		board = new Board();
-		cards = new HashSet<Card>();
 		players = new ArrayList<Player>();
+		board = new Board(players);
+		cards = new HashSet<Card>();
 		weapons = new ArrayList<String>();
 		solution = new Solution("", "", "");
 		
