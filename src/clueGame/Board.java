@@ -64,6 +64,7 @@ public class Board extends JPanel {
 			c.draw(g, this);
 		}
 		g.setColor(Color.blue);
+		//Draw Room name on each room
 		for(Map.Entry<String, Point> entry: roomPositions.entrySet()) {
 			Point p = entry.getValue();
 			String roomName = entry.getKey();

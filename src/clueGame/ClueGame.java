@@ -297,4 +297,5 @@ public class ClueGame extends JFrame {
 		Solution solution = new Solution("Mrs. Peacock", "Lead Pipe", "Pantry");
 		return solution;
 	}
+
 }

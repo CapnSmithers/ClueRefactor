@@ -52,21 +52,22 @@ public class RoomCell extends BoardCell {
 		return initial;
 	}
 	
+	//Draws room cells, including door direction if necessary
 	@Override
 	public void draw(Graphics g, Board b) {
 		g.setColor(Color.gray);
 		g.fillRect(colToPixels(), rowToPixels(), DIM, DIM);
 		g.setColor(Color.green);
 		switch(doorDirection){
-		case UP: g.fillRect(colToPixels(), rowToPixels(), DIM, DIM/5);
-		break;
-		case LEFT: g.fillRect(colToPixels(), rowToPixels(), DIM/5, DIM);
-		break;
-		case RIGHT: g.fillRect(colToPixels() + DIM*4/5, rowToPixels(), DIM/5, DIM);	
-		break;
-		case DOWN: g.fillRect(colToPixels(), rowToPixels() + DIM*4/5, DIM, DIM/5);
-		break;
-		case NONE:
+			case UP: g.fillRect(colToPixels(), rowToPixels(), DIM, DIM/5);
+				break;
+			case LEFT: g.fillRect(colToPixels(), rowToPixels(), DIM/5, DIM);
+				break;
+			case RIGHT: g.fillRect(colToPixels() + DIM*4/5, rowToPixels(), DIM/5, DIM);	
+				break;
+			case DOWN: g.fillRect(colToPixels(), rowToPixels() + DIM*4/5, DIM, DIM/5);
+				break;
+			case NONE:
 		}
 	}
 	
