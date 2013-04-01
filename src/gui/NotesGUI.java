@@ -3,13 +3,14 @@ package gui;
 import java.awt.GridLayout;
 
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class NotesGUI extends JDialog {
 	
 	public NotesGUI() {
 		setTitle("Dectective Notes");
-		setSize(200, 300);
+		setSize(500,600);
 		setLayout(new GridLayout(3, 2));
 		
 		//Room, person and weapon checkbox panels are in their own classes

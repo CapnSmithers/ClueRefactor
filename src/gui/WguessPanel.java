@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 
 public class WguessPanel extends JPanel {
 	
@@ -17,5 +19,8 @@ public class WguessPanel extends JPanel {
 		guess.addItem("Rope");
 		guess.addItem("Wrench");
 		
+		add(guess);
+		
+		setBorder(new TitledBorder(new EtchedBorder(), "Weapon Guess"));
 	}
 }
