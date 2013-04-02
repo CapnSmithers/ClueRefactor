@@ -98,7 +98,7 @@ public class ClueGame extends JFrame {
 		ControlGUI controlGUI = new ControlGUI();
 		add(controlGUI, BorderLayout.SOUTH);
 		add(board, BorderLayout.CENTER);
-		//add(createPlayerCards(), BorderLayout.EAST);
+		add(createPlayerCards(), BorderLayout.EAST);
 	}
 
 	public void deal() {
@@ -147,46 +147,46 @@ public class ClueGame extends JFrame {
 
 	}
 	
-//	//Function to display player cards
-//	//Still need to work on formatting
-//	private JPanel createPlayerCards() {
-//		JPanel playerCards = new JPanel();
-//		JPanel peopleCards = new JPanel();
-//		JPanel weaponCards = new JPanel();
-//		JPanel roomCards = new JPanel();
-//		JLabel myCards = new JLabel("My Cards:");
-//		
-//		playerCards.setLayout(new GridLayout(4,1));
-//		peopleCards.setLayout(new GridLayout(0, 1));
-//		weaponCards.setLayout(new GridLayout(0, 1));
-//		roomCards.setLayout(new GridLayout(0, 1));
-//		
-//		for(Card c : humanPlayer.myCards) {
-//			if (c.getCardType() == Card.CardType.ROOM) {		//Add to roomCards panel
-//				JTextField room = new JTextField(c.getCardName());
-//				room.setEditable(false);
-//				roomCards.add(room);
-//			} else if (c.getCardType() == Card.CardType.WEAPON) {  //Add to weaponCards panel
-//				JTextField weapon = new JTextField(c.getCardName());
-//				weapon.setEditable(false);
-//				weaponCards.add(weapon);
-//			} else {												//Add to peopleCards panel
-//				JTextField people = new JTextField(c.getCardName());
-//				people.setEditable(false);
-//				peopleCards.add(people);
-//			}
-//		}
-//		
-//		peopleCards.setBorder(new TitledBorder(new EtchedBorder(), "People"));
-//		roomCards.setBorder(new TitledBorder(new EtchedBorder(), "Rooms"));
-//		weaponCards.setBorder(new TitledBorder(new EtchedBorder(), "Weapons"));
-//		
-//		playerCards.add(myCards);
-//		playerCards.add(peopleCards);
-//		playerCards.add(weaponCards);
-//		playerCards.add(roomCards);
-//		return playerCards;
-//	}
+	//Function to display player cards
+	//Still need to work on formatting
+	private JPanel createPlayerCards() {
+		JPanel playerCards = new JPanel();
+		JPanel peopleCards = new JPanel();
+		JPanel weaponCards = new JPanel();
+		JPanel roomCards = new JPanel();
+		JLabel myCards = new JLabel("My Cards:");
+		
+		playerCards.setLayout(new GridLayout(4,1));
+		peopleCards.setLayout(new GridLayout(0, 1));
+		weaponCards.setLayout(new GridLayout(0, 1));
+		roomCards.setLayout(new GridLayout(0, 1));
+		
+		for(Card c : humanPlayer.myCards) {
+			if (c.getCardType() == Card.CardType.ROOM) {		//Add to roomCards panel
+				JTextField room = new JTextField(c.getCardName());
+				room.setEditable(false);
+				roomCards.add(room);
+			} else if (c.getCardType() == Card.CardType.WEAPON) {  //Add to weaponCards panel
+				JTextField weapon = new JTextField(c.getCardName());
+				weapon.setEditable(false);
+				weaponCards.add(weapon);
+			} else {												//Add to peopleCards panel
+				JTextField people = new JTextField(c.getCardName());
+				people.setEditable(false);
+				peopleCards.add(people);
+			}
+		}
+		
+		peopleCards.setBorder(new TitledBorder(new EtchedBorder(), "People"));
+		roomCards.setBorder(new TitledBorder(new EtchedBorder(), "Rooms"));
+		weaponCards.setBorder(new TitledBorder(new EtchedBorder(), "Weapons"));
+		
+		playerCards.add(myCards);
+		playerCards.add(peopleCards);
+		playerCards.add(weaponCards);
+		playerCards.add(roomCards);
+		return playerCards;
+	}
 
 	private void createDeck() {
 		//use players array for players cards
@@ -326,7 +326,7 @@ public class ClueGame extends JFrame {
 		ClueGame game = new ClueGame();
 		game.setVisible(true);
 		String message = "You are " + game.humanPlayer.getPlayerName() + ". Press Next Player to start.";
-		//JOptionPane.showMessageDialog(game, message, "Let's Play Clue!", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(game, message, "Let's Play Clue!", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	/*
