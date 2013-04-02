@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
@@ -11,6 +12,7 @@ public class RoomPanel extends JPanel {
 	JCheckBox gallery;
 	JCheckBox billiardsRoom;
 	JCheckBox library;
+	JCheckBox bathroom;
 	JCheckBox bedroom;
 	JCheckBox ballroom;
 	JCheckBox conservatory;
@@ -18,10 +20,11 @@ public class RoomPanel extends JPanel {
 	JCheckBox pantry;
 	
 	public RoomPanel() {
-		setLayout(new GridLayout(4,4));
+		setLayout(new FlowLayout());
 		gallery = new JCheckBox("Gallery");
 		billiardsRoom = new JCheckBox("Billiards Room");
 		library = new JCheckBox("Libarary");
+		bathroom = new JCheckBox("Bathhroom");
 		bedroom = new JCheckBox("Bedroom");
 		ballroom = new JCheckBox("Ballroom");
 		conservatory = new JCheckBox("Conservatory");
@@ -31,6 +34,7 @@ public class RoomPanel extends JPanel {
 		add(gallery);
 		add(billiardsRoom);
 		add(library);
+		add(bathroom);
 		add(bedroom);
 		add(ballroom);
 		add(conservatory);

@@ -10,7 +10,7 @@ public class NotesGUI extends JDialog {
 	
 	public NotesGUI() {
 		setTitle("Dectective Notes");
-		setSize(500,600);
+		setSize(600,600);
 		setLayout(new GridLayout(3, 2));
 		
 		//Room, person and weapon checkbox panels are in their own classes
