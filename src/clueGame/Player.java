@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class Player {
 	private String playerName, colorStr;
 	private Color color;
 	private int startingLocation;
 	private int currentLocation;
+	private Integer steps;
 	protected ArrayList<Card> myCards;
 	
 	public static final int DIM = BoardCell.DIM;
@@ -22,6 +24,7 @@ public class Player {
 		this.startingLocation = (16*23);
 		this.currentLocation = this.startingLocation;
 		this.myCards = new ArrayList<Card>();
+		steps = 0;
 	}
 	
 	public Player(String playerName, String color, Integer startingLocation) {
@@ -32,6 +35,7 @@ public class Player {
 		this.startingLocation = startingLocation;
 		this.currentLocation = this.startingLocation;
 		this.myCards = new ArrayList<Card>();
+		steps = 0;
 	}
 	
 	public Card disproveSuggestion(Card person, Card weapon, Card room) {
@@ -123,4 +127,19 @@ public class Player {
 	public void setCurrentLocation(int currentLocation) {
 		this.currentLocation = currentLocation;
 	}
+
+	public void makeMove() {
+		steps = rollDie();
+	}
+	
+	public int rollDie() {
+		Random random = new Random();
+		return random.nextInt(6);
+	}
+	
+	public String getSteps() {
+		return steps.toString();
+	}
+		
+		
 }

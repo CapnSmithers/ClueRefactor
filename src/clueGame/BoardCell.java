@@ -35,4 +35,5 @@ public abstract class BoardCell {
 	}
 	
 	abstract public void draw(Graphics g, Board b);
+
 }

@@ -55,7 +55,11 @@ public class RoomCell extends BoardCell {
 	//Draws room cells, including door direction if necessary
 	@Override
 	public void draw(Graphics g, Board b) {
-		g.setColor(Color.gray);
+		if(b.getTargets().contains(this) && b.getClueGame().checkHumanPlayerMove()) {
+			g.setColor(Color.cyan);
+		} else {
+			g.setColor(Color.gray);
+		}
 		g.fillRect(colToPixels(), rowToPixels(), DIM, DIM);
 		g.setColor(Color.green);
 		switch(doorDirection){

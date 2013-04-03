@@ -19,6 +19,7 @@ import clueGame.RoomCell.DoorDirection;
 
 public class Board extends JPanel {
 	
+	private ClueGame clueGame;
 	private ArrayList<BoardCell> cells; //stores board
 	private Map<Character, String> rooms; //legend codes
 	private Map<String, Point> roomPositions; //room name positions
@@ -30,11 +31,12 @@ public class Board extends JPanel {
 	private int numColumns;
 	private String mapConfigFileName, legendConfigFilename; //csv file with board initials; txt with legend file info
 	
-	public Board(ArrayList<Player> players) {
+	public Board(ClueGame clueGame) {
 		mapConfigFileName = "ClueMap.csv"; //default map name
 		legendConfigFilename = "legend.txt"; //default legend name
 		//initializations
-		this.players = players;
+		this.clueGame = clueGame;
+		this.players = clueGame.players;
 		cells = new ArrayList<BoardCell>(); 
 		rooms = new HashMap<Character, String>();
 		roomPositions = new HashMap<String, Point>();
@@ -75,6 +77,7 @@ public class Board extends JPanel {
 		for (Player p : players) {
 			p.draw(g, this);
 		}
+		
 	}
 	
 	public void loadConfigFiles() { //loads legend, then board, calcs adjacencies
@@ -127,6 +130,7 @@ public class Board extends JPanel {
 				cells.add(new RoomCell(curRow, curCol, initial, doorDir)); //add room cell (see RoomCell for specifics)
 			curCol++;
 		}
+		s.close();
 		
 		return curCol;
 	}
@@ -327,6 +331,10 @@ public class Board extends JPanel {
 		return rooms;
 	}
 	
+	public ClueGame getClueGame() {
+		return clueGame;
+	}
+
 	public String getRoomName(Character key) {
 		return rooms.get(key);
 	}

@@ -43,7 +43,7 @@ public class ClueGame extends JFrame {
 	private Solution solution;
 	public Board board;
 	public static final int WINDOW_HEIGHT = 850;
-	public static final int WINDOW_WIDTH = 1200;	
+	public static final int WINDOW_WIDTH = 900;	
 	
 	public ClueGame() {
 		//Initialize JFrame object
@@ -59,7 +59,7 @@ public class ClueGame extends JFrame {
 		weaponConfigFilename = "weaponConfig.txt"; //default weapon config name
 		
 		players = new ArrayList<Player>();
-		board = new Board(players);
+		board = new Board(this);
 		cards = new HashSet<Card>();
 		weapons = new ArrayList<String>();
 		solution = new Solution("", "", "");
@@ -95,10 +95,10 @@ public class ClueGame extends JFrame {
 		deal();
 		
 		//Adds GUI components to JFrame
-		ControlGUI controlGUI = new ControlGUI();
+		ControlGUI controlGUI = new ControlGUI(this);
 		add(controlGUI, BorderLayout.SOUTH);
 		add(board, BorderLayout.CENTER);
-		add(createPlayerCards(), BorderLayout.EAST);
+		add(displayPlayerCards(), BorderLayout.EAST);
 	}
 
 	public void deal() {
@@ -112,7 +112,7 @@ public class ClueGame extends JFrame {
 		}
 	}
 	
-
+	
 	//Creates menu bar objects in JFrame
 	private JMenu createMenuBar() {
 		JMenu menu = new JMenu("File"); 
@@ -149,7 +149,7 @@ public class ClueGame extends JFrame {
 	
 	//Function to display player cards
 	//Still need to work on formatting
-	private JPanel createPlayerCards() {
+	private JPanel displayPlayerCards() {
 		JPanel playerCards = new JPanel();
 		JPanel peopleCards = new JPanel();
 		JPanel weaponCards = new JPanel();
@@ -319,6 +319,30 @@ public class ClueGame extends JFrame {
 	
 	public boolean checkAccusation(Solution proposed) {
 		return solution.matches(proposed);
+	}
+	
+	public void nextTurn() {
+		if(!humanPlayerHasMoved())
+			return;
+		curPlayerTurn = (curPlayerTurn + 1)%players.size();
+		players.get(curPlayerTurn).makeMove();
+	}
+	
+	public Player getCurrentPlayer() {
+		return players.get(curPlayerTurn);
+	}
+	
+	//Checks if it is human's turn
+	public boolean checkHumanPlayerMove() {
+		if (players.get(curPlayerTurn) == humanPlayer) {
+			return true;
+		}
+		return false;
+	}
+	
+	//Checks if human player has moved
+	public boolean humanPlayerHasMoved() {
+		return humanPlayer.getHasMoved();
 	}
 	
 	//Main function to display board

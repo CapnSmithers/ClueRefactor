@@ -17,7 +17,11 @@ public class WalkwayCell extends BoardCell {
 	
 	@Override
 	public void draw(Graphics g, Board b) {
-		g.setColor(Color.yellow);
+		if(b.getTargets().contains(this) && b.getClueGame().checkHumanPlayerMove()) {
+			g.setColor(Color.cyan);
+		} else {
+			g.setColor(Color.yellow);
+		}
 		g.fillRect(colToPixels(), rowToPixels(), DIM, DIM);
 		g.setColor(Color.black);
 		g.drawRect(colToPixels(), rowToPixels(), DIM, DIM);

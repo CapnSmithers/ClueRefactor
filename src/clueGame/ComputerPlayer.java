@@ -47,7 +47,7 @@ public class ComputerPlayer extends Player {
 	}
 	
 	public void createSuggestion() {
-		
+
 	}
 	
 	public void updateSeen(Card seen) {

@@ -3,16 +3,22 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import clueGame.ClueGame;
+import clueGame.Player;
+
 public class ControlGUI extends JPanel {
 	
 	private JTextField whoseTurn;
+	JTextField dieRoll;
 
-	public ControlGUI() {
+	public ControlGUI(ClueGame clueGame) {
 		
 		//Main panel, contains all components
 		JPanel mainPanel = new JPanel();
@@ -29,12 +35,13 @@ public class ControlGUI extends JPanel {
 		//Next Player and Make Accusation buttons
 		JButton nextPlayer = new JButton("Next Player");
 		JButton makeAccusation = new JButton("Make Accusation");
+		nextPlayer.addActionListener(new nextButtonListener(clueGame));
 		mainPanel.add(nextPlayer);
 		mainPanel.add(makeAccusation);
 		
 		//Die roll
 		JPanel dieRollPanel = new JPanel();
-		JTextField dieRoll = new JTextField(2);
+		dieRoll = new JTextField(2);
 		dieRoll.setEditable(false);  //Can't edit this field
 		JLabel dieRollLabel = new JLabel("Roll:");
 		dieRollPanel.add(dieRollLabel);
@@ -65,4 +72,38 @@ public class ControlGUI extends JPanel {
 		add(mainPanel, BorderLayout.CENTER);
 	}
 	
+	class nextButtonListener implements ActionListener {
+		ClueGame clueGame;
+		
+		public nextButtonListener(ClueGame clueGame) {
+			this.clueGame = clueGame;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			clueGame.nextTurn();
+			whoseTurn.setText(clueGame.getCurrentPlayer().getPlayerName());
+			dieRoll.setText(clueGame.getCurrentPlayer().getSteps());
+		}
+		
+	}
+	
+	class accuseButtonListener implements ActionListener {
+		ClueGame clueGame;
+		
+		public accuseButtonListener(ClueGame clueGame) {
+			this.clueGame = clueGame;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	public void updateDisplay() {
+		
+	}
 }
