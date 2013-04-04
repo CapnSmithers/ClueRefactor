@@ -7,10 +7,11 @@ import java.util.Collections;
 import java.util.Random;
 
 public class Player {
+	protected ClueGame clueGame;
 	private String playerName, colorStr;
 	private Color color;
 	private int startingLocation;
-	private int currentLocation;
+	protected int currentLocation;
 	private Integer steps;
 	protected ArrayList<Card> myCards;
 	
@@ -27,8 +28,9 @@ public class Player {
 		steps = 0;
 	}
 	
-	public Player(String playerName, String color, Integer startingLocation) {
+	public Player(ClueGame clueGame, String playerName, String color, Integer startingLocation) {
 		super();
+		this.clueGame = clueGame;
 		this.playerName = playerName;
 		this.colorStr = color;
 		this.color = convertColor(this.colorStr);
