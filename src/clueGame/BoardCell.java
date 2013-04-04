@@ -34,6 +34,14 @@ public abstract class BoardCell {
 		return col*DIM;
 	}
 	
+	public int getRow() {
+		return row;
+	}
+	
+	public int getCol() {
+		return col;
+	}
+	
 	abstract public void draw(Graphics g, Board b);
 
 }

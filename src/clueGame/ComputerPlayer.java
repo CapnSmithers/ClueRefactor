@@ -8,6 +8,7 @@ import java.util.Set;
 public class ComputerPlayer extends Player {
 	
 	private char lastRoomVisited;
+	private char nextToLastVisited;
 
 	public ComputerPlayer() {
 		super();
@@ -25,18 +26,22 @@ public class ComputerPlayer extends Player {
 		for (BoardCell c : targets) {
 			if (c.isDoorway()) {
 				RoomCell d = (RoomCell) c;
-				if (this.lastRoomVisited != d.getInitial()) {
-					possibilities.add(c);
+				System.out.println(d.getInitial());
+				if (lastRoomVisited != d.getInitial() && nextToLastVisited != d.getInitial()) {  //Make sure room wasn't just visited
+
+					System.out.println(lastRoomVisited + " " + nextToLastVisited+ " " + getPlayerName());
+					nextToLastVisited = lastRoomVisited;
+					lastRoomVisited = d.getInitial();
+					System.out.println(lastRoomVisited + " " + nextToLastVisited+ " " + getPlayerName());
+					return c;
 				}
 			}
 		}
 		
-		if (possibilities.size() <= 0) {
-			//no doors, use walkways instead
-			for (BoardCell c : targets) {
-	            possibilities.add(c);
-	        }
-		}
+		//no doors, use walkways instead
+		for (BoardCell c : targets) {
+	        possibilities.add(c);
+	    }
         
 		//choose random possibility
         Collections.shuffle(possibilities);
@@ -81,7 +86,13 @@ public class ComputerPlayer extends Player {
 	
 	@Override
 	public void makeMove() {
+		int rows = currentLocation/clueGame.board.getNumColumns();
+		int cols = currentLocation%clueGame.board.getNumColumns();
 		steps = rollDie();
+		clueGame.board.calcTargets(rows, cols, steps);
+		BoardCell target = pickLocation(clueGame.board.getTargets());
+		currentLocation = clueGame.board.calcIndex(target.getRow(), target.getCol());
+		clueGame.board.repaint();
 	}
 	
 	/*

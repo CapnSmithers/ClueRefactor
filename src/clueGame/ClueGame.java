@@ -290,8 +290,8 @@ public class ClueGame extends JFrame {
 	}
 	
 	public void nextTurn() {
-		if(!humanPlayerHasMoved())
-			return;
+		//if(!humanPlayerHasMoved())
+		//	return;
 		curPlayerTurn = (curPlayerTurn + 1)%players.size();
 		players.get(curPlayerTurn).makeMove();
 	}

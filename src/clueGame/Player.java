@@ -12,7 +12,7 @@ public class Player {
 	private Color color;
 	private int startingLocation;
 	protected int currentLocation;
-	private Integer steps;
+	protected Integer steps;
 	protected ArrayList<Card> myCards;
 	
 	public static final int DIM = BoardCell.DIM;
