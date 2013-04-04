@@ -13,9 +13,8 @@ public class ComputerPlayer extends Player {
 		super();
 	}
 
-	public ComputerPlayer(String playerName, String color,
-			Integer startingLocation) {
-		super(playerName, color, startingLocation);
+	public ComputerPlayer(ClueGame clueGame, String playerName, String color, Integer startingLocation) {
+		super(clueGame, playerName, color, startingLocation);
 	}
 
 	public BoardCell pickLocation(Set<BoardCell> targets) {
@@ -46,8 +45,34 @@ public class ComputerPlayer extends Player {
         return possibilities.get(0);
 	}
 	
-	public void createSuggestion() {
-
+	public Solution createSuggestion() {
+		RoomCell rc = clueGame.getBoard().getRoomCellAt(currentLocation);
+		String roomName = clueGame.getBoard().getRoomName(rc.getInitial());
+		
+		ArrayList<Card> person_possibilities = new ArrayList<Card>();
+		ArrayList<Card> weapon_possibilities = new ArrayList<Card>();
+		for (Card c : clueGame.getCards()) {
+			if (!c.isHasBeenRevealed()) {
+				if (c.getCardType() == Card.CardType.PERSON) {
+					person_possibilities.add(c);
+				}
+				if (c.getCardType() == Card.CardType.WEAPON) {
+					weapon_possibilities.add(c);
+				}
+			}
+		}
+		
+		if (person_possibilities.size() <= 0 || weapon_possibilities.size() <= 0)
+        	return null;
+		
+		Collections.shuffle(person_possibilities);
+		Collections.shuffle(weapon_possibilities);
+		
+		Card personCard = person_possibilities.get(0);
+		Card weaponCard = weapon_possibilities.get(0);
+		Card roomCard = new Card(roomName, Card.CardType.ROOM);
+		
+		return new Solution(personCard, weaponCard, roomCard);
 	}
 	
 	public void updateSeen(Card seen) {

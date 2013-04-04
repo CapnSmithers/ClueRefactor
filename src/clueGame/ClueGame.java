@@ -230,11 +230,11 @@ public class ClueGame extends JFrame {
 			int pCol = Integer.parseInt(pInfo[3].trim());
 			Player p = null;
 			if (humanPlayerIndex == numPlayers) {
-				p = new HumanPlayer(pName, pColor, board.calcIndex(pRow, pCol));
+				p = new HumanPlayer(this, pName, pColor, board.calcIndex(pRow, pCol));
 				humanPlayer = (HumanPlayer) p;
 			}
 			else {
-				p = new ComputerPlayer(pName, pColor, board.calcIndex(pRow, pCol));
+				p = new ComputerPlayer(this, pName, pColor, board.calcIndex(pRow, pCol));
 			}
 			players.add(p);
 			numPlayers++;		
@@ -284,38 +284,6 @@ public class ClueGame extends JFrame {
         return possibilities.get(0);
 	}
 	
-	public Solution createSuggestion() {
-		//create a suggestion for the current player
-		
-		Player p = players.get(curPlayerTurn);
-		RoomCell rc = (RoomCell) board.getRoomCellAt(p.getCurrentLocation());
-		String roomName = board.getRoomName(rc.getInitial());
-		
-		ArrayList<Card> person_possibilities = new ArrayList<Card>();
-		ArrayList<Card> weapon_possibilities = new ArrayList<Card>();
-		for (Card c : cards) {
-			if (!c.isHasBeenRevealed()) {
-				if (c.getCardType() == Card.CardType.PERSON) {
-					person_possibilities.add(c);
-				}
-				if (c.getCardType() == Card.CardType.WEAPON) {
-					weapon_possibilities.add(c);
-				}
-			}
-		}
-		
-		if (person_possibilities.size() <= 0 || weapon_possibilities.size() <= 0)
-        	return null;
-		
-		Collections.shuffle(person_possibilities);
-		Collections.shuffle(weapon_possibilities);
-		
-		Card personCard = person_possibilities.get(0);
-		Card weaponCard = weapon_possibilities.get(0);
-		Card roomCard = new Card(roomName, Card.CardType.ROOM);
-		
-		return new Solution(personCard, weaponCard, roomCard);
-	}
 	
 	public boolean checkAccusation(Solution proposed) {
 		return solution.matches(proposed);
