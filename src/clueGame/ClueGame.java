@@ -329,7 +329,7 @@ public class ClueGame extends JFrame {
 	}
 	
 	public Player getCurrentPlayer() {
-		return players.get(curPlayerTurn);
+		return players.get(curPlayerTurn%players.size());
 	}
 	
 	//Checks if it is human's turn

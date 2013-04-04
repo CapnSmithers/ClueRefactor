@@ -54,6 +54,11 @@ public class ComputerPlayer extends Player {
 		
 	}
 	
+	@Override
+	public void makeMove() {
+		steps = rollDie();
+	}
+	
 	/*
 	 * Getters and Setters for Testing only
 	 */

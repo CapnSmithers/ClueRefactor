@@ -17,6 +17,7 @@ public class HumanPlayer extends Player {
 	
 	@Override
 	public void makeMove() {
+		steps = rollDie();
 		hasMoved = false;
 	}
 

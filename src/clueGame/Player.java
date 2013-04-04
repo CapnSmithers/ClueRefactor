@@ -11,7 +11,7 @@ public class Player {
 	private Color color;
 	private int startingLocation;
 	private int currentLocation;
-	private Integer steps;
+	protected Integer steps;
 	protected ArrayList<Card> myCards;
 	
 	public static final int DIM = BoardCell.DIM;
@@ -134,7 +134,7 @@ public class Player {
 	
 	public int rollDie() {
 		Random random = new Random();
-		return random.nextInt(6);
+		return random.nextInt(5) + 1;  //Ensures that roll will be at least 1
 	}
 	
 	public String getSteps() {
