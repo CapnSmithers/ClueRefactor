@@ -2,6 +2,8 @@ package clueGame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 
 public class WalkwayCell extends BoardCell {
 	
@@ -25,5 +27,13 @@ public class WalkwayCell extends BoardCell {
 		g.fillRect(colToPixels(), rowToPixels(), DIM, DIM);
 		g.setColor(Color.black);
 		g.drawRect(colToPixels(), rowToPixels(), DIM, DIM);
+	}
+
+	@Override
+	public boolean containsClick(int x, int y) {
+		Rectangle rect = new Rectangle(x, y, DIM, DIM);
+		if (rect.contains(new Point(x, y))) 
+			return true;
+		return false;
 	}
 }

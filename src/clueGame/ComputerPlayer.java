@@ -26,13 +26,9 @@ public class ComputerPlayer extends Player {
 		for (BoardCell c : targets) {
 			if (c.isDoorway()) {
 				RoomCell d = (RoomCell) c;
-				System.out.println(d.getInitial());
 				if (lastRoomVisited != d.getInitial() && nextToLastVisited != d.getInitial()) {  //Make sure room wasn't just visited
-
-					System.out.println(lastRoomVisited + " " + nextToLastVisited+ " " + getPlayerName());
 					nextToLastVisited = lastRoomVisited;
 					lastRoomVisited = d.getInitial();
-					System.out.println(lastRoomVisited + " " + nextToLastVisited+ " " + getPlayerName());
 					return c;
 				}
 			}

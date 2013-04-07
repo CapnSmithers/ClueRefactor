@@ -3,6 +3,8 @@ package clueGame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 
 public class RoomCell extends BoardCell {
 	public enum DoorDirection {UP, DOWN, LEFT, RIGHT, NONE};
@@ -73,6 +75,21 @@ public class RoomCell extends BoardCell {
 				break;
 			case NONE:
 		}
+	}
+	
+	//Can only move into room cell if it's a doorway
+	@Override
+	public boolean containsClick(int x, int y) {
+		if(this.isDoorway()) {
+			Rectangle rect = new Rectangle(x, y, DIM, DIM);
+			if (rect.contains(new Point(x, y))) 
+				return true;
+			return false;
+		} else {
+			return false;
+		}
+		
+
 	}
 	
 }

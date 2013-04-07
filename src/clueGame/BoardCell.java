@@ -25,6 +25,10 @@ public abstract class BoardCell {
 		return false;
 	}
 	
+	public boolean containsClick(int x, int y) {
+		return false;
+	}
+	
 	//Helper functions to calculate position of object in pixels
 	public int rowToPixels() {
 		return row*DIM;

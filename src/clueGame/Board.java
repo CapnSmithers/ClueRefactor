@@ -3,6 +3,8 @@ package clueGame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -13,11 +15,12 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import clueGame.RoomCell.DoorDirection;
 
-public class Board extends JPanel {
+public class Board extends JPanel implements MouseListener {
 	
 	private ClueGame clueGame;
 	private ArrayList<BoardCell> cells; //stores board
@@ -45,6 +48,8 @@ public class Board extends JPanel {
 		
 		loadConfigFiles();
 		calcAdjacencies();
+		
+		addMouseListener(this);
 	}
 	
 	public Board(String mapName, String legendName) { //instantiator with filenames
@@ -79,6 +84,41 @@ public class Board extends JPanel {
 		}
 		
 	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		//Make sure that the human is the only one to respond to mouse listener
+		if(clueGame.players.get(clueGame.curPlayerTurn) == clueGame.humanPlayer) {
+			BoardCell selection = null;
+			Object[] t =  targets.toArray();
+			for(int i = 0; i < targets.size(); i++) {
+				if(((BoardCell) t[i]).containsClick(e.getX(), e.getY())) {
+					selection = (BoardCell) t[i];
+					break;
+				}
+			}
+			if(selection != null) {
+				Player p = clueGame.players.get(clueGame.curPlayerTurn);
+				p.currentLocation = calcIndex(selection.getRow(), selection.getCol());
+				repaint();
+			} else {
+				JOptionPane.showMessageDialog(clueGame, "Not a valid cell",
+						"Oops!", JOptionPane.WARNING_MESSAGE);
+
+			}
+		}
+		
+	}
+
+	//Empty mouse action listeners
+	@Override
+	public void mouseEntered(MouseEvent e) {}
+	@Override
+	public void mouseExited(MouseEvent e) {}
+	@Override
+	public void mousePressed(MouseEvent e) {}
+	@Override
+	public void mouseReleased(MouseEvent e) {}
 	
 	public void loadConfigFiles() { //loads legend, then board, calcs adjacencies
 		try {

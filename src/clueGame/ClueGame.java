@@ -43,7 +43,7 @@ public class ClueGame extends JFrame {
 	private Solution solution;
 	public Board board;
 	public static final int WINDOW_HEIGHT = 850;
-	public static final int WINDOW_WIDTH = 900;	
+	public static final int WINDOW_WIDTH = 1200;	
 	
 	public ClueGame() {
 		//Initialize JFrame object
@@ -290,8 +290,11 @@ public class ClueGame extends JFrame {
 	}
 	
 	public void nextTurn() {
-		//if(!humanPlayerHasMoved())
-		//	return;
+		if(!humanPlayerHasMoved()) {
+			JOptionPane.showMessageDialog(this, "Human must move before the next turn!",
+					"Human Must Move!", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 		curPlayerTurn = (curPlayerTurn + 1)%players.size();
 		players.get(curPlayerTurn).makeMove();
 	}
