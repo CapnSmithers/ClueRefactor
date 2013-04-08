@@ -81,10 +81,11 @@ public class RoomCell extends BoardCell {
 	@Override
 	public boolean containsClick(int x, int y) {
 		if(this.isDoorway()) {
-			Rectangle rect = new Rectangle(x, y, DIM, DIM);
+			Rectangle rect = new Rectangle(this.colToPixels(), this.rowToPixels(), DIM, DIM);
 			if (rect.contains(new Point(x, y))) 
 				return true;
-			return false;
+			else;
+				return false;
 		} else {
 			return false;
 		}

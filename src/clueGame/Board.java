@@ -88,6 +88,7 @@ public class Board extends JPanel implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		//Make sure that the human is the only one to respond to mouse listener
+		System.out.println(e.getX() + ", " + e.getY());
 		if(clueGame.players.get(clueGame.curPlayerTurn) == clueGame.humanPlayer) {
 			BoardCell selection = null;
 			Object[] t =  targets.toArray();
@@ -98,8 +99,9 @@ public class Board extends JPanel implements MouseListener {
 				}
 			}
 			if(selection != null) {
-				Player p = clueGame.players.get(clueGame.curPlayerTurn);
+				HumanPlayer p = (HumanPlayer) clueGame.players.get(clueGame.curPlayerTurn);
 				p.currentLocation = calcIndex(selection.getRow(), selection.getCol());
+				p.setHasMoved(true);
 				repaint();
 			} else {
 				JOptionPane.showMessageDialog(clueGame, "Not a valid cell",

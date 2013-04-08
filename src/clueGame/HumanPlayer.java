@@ -22,10 +22,7 @@ public class HumanPlayer extends Player {
 		steps = rollDie();
 		hasMoved = false;
 		clueGame.board.calcTargets(rows, cols, steps);
-		clueGame.board.repaint();
-		//Mouse Listener that selects board cell
-		hasMoved = true;
-		
+		clueGame.board.repaint();	
 	}
 
 	
