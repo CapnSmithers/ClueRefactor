@@ -12,13 +12,15 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import clueGame.Card;
 import clueGame.ClueGame;
 import clueGame.Player;
+import clueGame.Solution;
 
 public class ControlGUI extends JPanel {
 	
 	private JTextField whoseTurn;
-	JTextField dieRoll;
+	JTextField dieRoll, guessResultText, guessText;
 
 	public ControlGUI(ClueGame clueGame) {
 		
@@ -53,7 +55,7 @@ public class ControlGUI extends JPanel {
 		
 		//Guess panel
 		JPanel guessPanel = new JPanel();
-		JTextField guessText = new JTextField(20);
+		guessText = new JTextField(20);
 		guessText.setEditable(false);  //Can't edit this field
 		JLabel guess = new JLabel("Guess:");
 		guessPanel.add(guess);
@@ -63,7 +65,7 @@ public class ControlGUI extends JPanel {
 		
 		//Guess Result panel
 		JPanel guessResultPanel = new JPanel();
-		JTextField guessResultText = new JTextField(20);
+		guessResultText = new JTextField(20);
 		guessResultText.setEditable(false);  //Can't edit this field
 		JLabel guessResult = new JLabel("Guess Result:");
 		guessResultPanel.add(guessResult);
@@ -86,6 +88,8 @@ public class ControlGUI extends JPanel {
 			clueGame.nextTurn();
 			whoseTurn.setText(clueGame.getCurrentPlayer().getPlayerName());
 			dieRoll.setText(clueGame.getCurrentPlayer().getSteps());
+			guessText.setText(clueGame.getPlayerGuess());
+			guessResultText.setText(clueGame.getPlayerGuessResult());
 		}
 		
 	}

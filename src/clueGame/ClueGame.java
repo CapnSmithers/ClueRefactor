@@ -42,6 +42,8 @@ public class ClueGame extends JFrame {
 	public int curPlayerTurn;
 	private Solution solution;
 	public Board board;
+	private Solution playerGuess;
+	private Card playerGuessResult;
 	public static final int WINDOW_HEIGHT = 850;
 	public static final int WINDOW_WIDTH = 1200;	
 	
@@ -85,7 +87,7 @@ public class ClueGame extends JFrame {
 	public void createGame(int humanPlayerIndex) {	
 		//load players and weapons
 		loadConfigFiles(humanPlayerIndex);
-		curPlayerTurn = 0;
+		curPlayerTurn = -1;
 		
 		//create new deck and solution
 		createDeck();	
@@ -279,11 +281,11 @@ public class ClueGame extends JFrame {
 		
 		//choose random possibility
         if (possibilities.size() <= 0) //no possible cards
-        	return null;
+        	return new Card("No new clues", Card.CardType.PERSON);
         Collections.shuffle(possibilities);
+        possibilities.get(0).setHasBeenRevealed(true);
         return possibilities.get(0);
 	}
-	
 	
 	public boolean checkAccusation(Solution proposed) {
 		return solution.matches(proposed);
@@ -327,6 +329,30 @@ public class ClueGame extends JFrame {
 	/*
 	 * Getters and setters for testing
 	 */
+	
+	public String getPlayerGuess() {
+		if (playerGuess != null) {
+			return playerGuess.toString();
+		} else {
+			return " ";
+		}
+	}
+
+	public String getPlayerGuessResult() {
+		if (playerGuessResult != null)
+			return playerGuessResult.getCardName();
+		else
+			return " ";
+	}
+	
+	public void setPlayerGuess(Solution playerGuess) {
+		this.playerGuess = playerGuess;
+	}
+
+	public void setPlayerGuessResult(Card playerGuessResult) {
+		this.playerGuessResult = playerGuessResult;
+	}
+
 	public Board getBoard() {
 		return board;
 	}

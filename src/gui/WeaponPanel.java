@@ -17,7 +17,7 @@ public class WeaponPanel extends JPanel {
 	
 	public WeaponPanel() {
 		setLayout(new GridLayout(4,4));
-		candlestick = new JCheckBox("Wrench");
+		candlestick = new JCheckBox("Candlestick");
 		knife = new JCheckBox("Knife");
 		leadPipe = new JCheckBox("Lead Pipe");
 		revolver = new JCheckBox("Revolver");

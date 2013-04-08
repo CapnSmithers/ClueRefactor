@@ -131,12 +131,12 @@ public class Player {
 	}
 
 	public void makeMove() {
-		steps = rollDie();
+
 	}
 	
 	public int rollDie() {
 		Random random = new Random();
-		return random.nextInt(5) + 1;  //Ensures that roll will be at least 1
+		return random.nextInt(6) + 1;  //Ensures that roll will be at least 1
 	}
 	
 	public String getSteps() {

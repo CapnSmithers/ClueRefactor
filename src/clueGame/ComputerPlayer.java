@@ -9,13 +9,19 @@ public class ComputerPlayer extends Player {
 	
 	private char lastRoomVisited;
 	private char nextToLastVisited;
+	private boolean accusationReady;
+	private Solution accusation;
 
 	public ComputerPlayer() {
 		super();
+		accusationReady = false;
+		accusation = null;
 	}
 
 	public ComputerPlayer(ClueGame clueGame, String playerName, String color, Integer startingLocation) {
 		super(clueGame, playerName, color, startingLocation);
+		accusationReady = false;
+		accusation = null;
 	}
 
 	public BoardCell pickLocation(Set<BoardCell> targets) {
@@ -82,18 +88,41 @@ public class ComputerPlayer extends Player {
 	
 	@Override
 	public void makeMove() {
+		Solution suggestion = null;
+		Card result = new Card("No new clues", Card.CardType.PERSON);
 		int rows = currentLocation/clueGame.board.getNumColumns();
 		int cols = currentLocation%clueGame.board.getNumColumns();
 		steps = rollDie();
-		clueGame.board.calcTargets(rows, cols, steps);
-		BoardCell target = pickLocation(clueGame.board.getTargets());
-		currentLocation = clueGame.board.calcIndex(target.getRow(), target.getCol());
-		clueGame.board.repaint();
+		if(accusationReady) {
+			makeAccusation();
+		} else {
+			clueGame.board.calcTargets(rows, cols, steps);
+			BoardCell target = pickLocation(clueGame.board.getTargets());
+			currentLocation = clueGame.board.calcIndex(target.getRow(), target.getCol());
+			if(clueGame.board.getCellAt(currentLocation).isDoorway()) {
+				suggestion = createSuggestion();
+			}
+			clueGame.setPlayerGuess(suggestion);
+			if(suggestion != null) {
+				accusation = suggestion;
+				result = clueGame.handleSuggestion(suggestion.person, suggestion.weapon, suggestion.room, this);
+				clueGame.setPlayerGuessResult(result);
+				if(result.getCardName().equalsIgnoreCase("No new clues")) {
+					accusationReady = true;
+				}
+			}
+			clueGame.board.repaint();
+		}
 	}
 	
 	/*
 	 * Getters and Setters for Testing only
 	 */
+
+	private void makeAccusation() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	public char getLastRoomVisited() {
 		return lastRoomVisited;
@@ -101,5 +130,13 @@ public class ComputerPlayer extends Player {
 
 	public void setLastRoomVisited(char lastRoomVisited) {
 		this.lastRoomVisited = lastRoomVisited;
+	}
+
+	public boolean isAccusationReady() {
+		return accusationReady;
+	}
+
+	public void setAccusationReady(boolean accusationReady) {
+		this.accusationReady = accusationReady;
 	}
 }

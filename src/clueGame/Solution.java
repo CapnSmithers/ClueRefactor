@@ -35,4 +35,8 @@ public class Solution {
 				s.weapon == this.weapon &&
 				s.room == this.room);
 	}
+	
+	public String toString() {
+		return person + "; " + weapon + "; " + room;
+	}
 }
