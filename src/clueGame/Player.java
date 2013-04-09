@@ -52,9 +52,22 @@ public class Player {
 		}
         
 		//choose random possibility
-        if (possibilities.size() <= 0) //no unrevealed cards
+        if (possibilities.size() <= 0)//no unrevealed cards
         	return null;
         Collections.shuffle(possibilities);
+        return possibilities.get(0);
+	}
+	
+	public Card disproveRoomSuggestion(Card room) {
+		ArrayList<Card> possibilities = new ArrayList<Card>();
+		for (Card c : myCards) {
+			if (c.equals(room)) {	
+				possibilities.add(c);
+			}
+		}
+		if (possibilities.size() <= 0)//no unrevealed cards
+			return null;
+		Collections.shuffle(possibilities);
         return possibilities.get(0);
 	}
 	

@@ -280,8 +280,15 @@ public class ClueGame extends JFrame {
 		}
 		
 		//choose random possibility
-        if (possibilities.size() <= 0) //no possible cards
-        	return new Card("No new clues", Card.CardType.PERSON);
+        if (possibilities.size() <= 0) {//if no possible cards, then at least return a conflicting room card
+        	for (Player p : players) {
+    			Card c = p.disproveRoomSuggestion(roomCard);
+    			if (c != null && (accusingPerson.getPlayerName() != p.getPlayerName()))
+    				possibilities.add(c);
+        	}
+        	if (possibilities.size() <= 0) //if still no possible cards, return a "card" with a message
+        		return new Card("No new clues", Card.CardType.PERSON);
+        }
         Collections.shuffle(possibilities);
         possibilities.get(0).setHasBeenRevealed(true);
         return possibilities.get(0);
