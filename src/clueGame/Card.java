@@ -54,7 +54,7 @@ public class Card {
         }
         
         Card c = (Card) obj;
-        if (this.cardName == c.cardName && this.cardType == c.cardType) {
+        if (this.cardName.equalsIgnoreCase(c.cardName) && this.cardType == c.cardType) {
         	return true;
         }
         

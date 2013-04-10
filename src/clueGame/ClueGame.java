@@ -44,6 +44,7 @@ public class ClueGame extends JFrame {
 	public Board board;
 	private Solution playerGuess;
 	private Card playerGuessResult;
+	private boolean playerHasWon;
 	public static final int WINDOW_HEIGHT = 850;
 	public static final int WINDOW_WIDTH = 1200;	
 	
@@ -88,6 +89,7 @@ public class ClueGame extends JFrame {
 		//load players and weapons
 		loadConfigFiles(humanPlayerIndex);
 		curPlayerTurn = -1;
+		playerHasWon = false;
 		
 		//create new deck and solution
 		createDeck();	
@@ -286,16 +288,29 @@ public class ClueGame extends JFrame {
     			if (c != null && (accusingPerson.getPlayerName() != p.getPlayerName()))
     				possibilities.add(c);
         	}
-        	if (possibilities.size() <= 0) //if still no possible cards, return a "card" with a message
-        		return new Card("No new clues", Card.CardType.PERSON);
+        	if (possibilities.size() <= 0) { //if still no possible cards, return a "card" with a message
+        		Card x = new Card("No new clues", Card.CardType.PERSON);
+        		setPlayerGuessResult(x);
+        		return x;
+        	}
         }
         Collections.shuffle(possibilities);
         possibilities.get(0).setHasBeenRevealed(true);
+        setPlayerGuessResult(possibilities.get(0));
         return possibilities.get(0);
 	}
 	
 	public boolean checkAccusation(Solution proposed) {
 		return solution.matches(proposed);
+	}
+	
+	//Sets playerHasWon variable to end the game
+	public void setHasWon(boolean hasWon) {
+		playerHasWon = hasWon;
+	}
+	
+	public boolean hasWon() {
+		return playerHasWon;
 	}
 	
 	public void nextTurn() {
@@ -309,6 +324,8 @@ public class ClueGame extends JFrame {
 	}
 	
 	public Player getCurrentPlayer() {
+		if (curPlayerTurn < 0) 
+			return null;
 		return players.get(curPlayerTurn%players.size());
 	}
 	
@@ -328,6 +345,7 @@ public class ClueGame extends JFrame {
 	//Main function to display board
 	public static void main(String[] args) {
 		ClueGame game = new ClueGame();
+		System.out.println(game.solution);
 		game.setVisible(true);
 		String message = "You are " + game.humanPlayer.getPlayerName() + ". Press Next Player to start.";
 		JOptionPane.showMessageDialog(game, message, "Let's Play Clue!", JOptionPane.INFORMATION_MESSAGE);

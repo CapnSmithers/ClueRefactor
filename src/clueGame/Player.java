@@ -95,7 +95,10 @@ public class Player {
 		g.drawOval(b.indexToPixelCol(currentLocation), b.indexToPixelRow(currentLocation),
 				DIM, DIM);
 	}
-
+	
+	public void moveTo(int index) {
+		currentLocation = index;
+	}
 	/*
 	 * Getters and setters for testing purposes
 	 */

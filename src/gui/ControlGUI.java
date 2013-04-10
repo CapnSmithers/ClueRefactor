@@ -40,6 +40,7 @@ public class ControlGUI extends JPanel {
 		JButton nextPlayer = new JButton("Next Player");
 		JButton makeAccusation = new JButton("Make Accusation");
 		nextPlayer.addActionListener(new nextButtonListener(clueGame));
+		makeAccusation.addActionListener(new accuseButtonListener(clueGame));
 		mainPanel.add(nextPlayer);
 		mainPanel.add(makeAccusation);
 		
@@ -57,20 +58,20 @@ public class ControlGUI extends JPanel {
 		JPanel guessPanel = new JPanel();
 		guessText = new JTextField(20);
 		guessText.setEditable(false);  //Can't edit this field
-		JLabel guess = new JLabel("Guess:");
+		JLabel guess = new JLabel("");
 		guessPanel.add(guess);
 		guessPanel.add(guessText);
-		guessPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess"));
+		guessPanel.setBorder(new TitledBorder(new EtchedBorder(), "Last Guess"));
 		mainPanel.add(guessPanel);
 		
 		//Guess Result panel
 		JPanel guessResultPanel = new JPanel();
 		guessResultText = new JTextField(20);
 		guessResultText.setEditable(false);  //Can't edit this field
-		JLabel guessResult = new JLabel("Guess Result:");
+		JLabel guessResult = new JLabel("");
 		guessResultPanel.add(guessResult);
 		guessResultPanel.add(guessResultText);
-		guessResultPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess Result"));
+		guessResultPanel.setBorder(new TitledBorder(new EtchedBorder(), "Last Guess Result"));
 		mainPanel.add(guessResultPanel);
 		
 		add(mainPanel, BorderLayout.CENTER);
@@ -85,11 +86,11 @@ public class ControlGUI extends JPanel {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			guessText.setText(clueGame.getPlayerGuess());
+			guessResultText.setText(clueGame.getPlayerGuessResult());
 			clueGame.nextTurn();
 			whoseTurn.setText(clueGame.getCurrentPlayer().getPlayerName());
 			dieRoll.setText(clueGame.getCurrentPlayer().getSteps());
-			guessText.setText(clueGame.getPlayerGuess());
-			guessResultText.setText(clueGame.getPlayerGuessResult());
 		}
 		
 	}
@@ -103,8 +104,31 @@ public class ControlGUI extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
 			
+			if(clueGame.getCurrentPlayer() == clueGame.humanPlayer && !clueGame.humanPlayerHasMoved()) {
+				AccuseGUI accuse = new AccuseGUI(clueGame);
+				accuse.setVisible(true);
+				
+				Solution accusation = clueGame.humanPlayer.getGuess();
+				boolean correct = clueGame.checkAccusation(accusation);
+				if(correct) {
+					String message = clueGame.humanPlayer.getPlayerName() + " has won the game with a correct guess of: "
+							+ accusation.person + " in the " + accusation.room + " with the " + accusation.weapon
+							+ "!";
+					JOptionPane.showMessageDialog(clueGame, message,
+							"Game Over!", JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					String message = clueGame.humanPlayer.getPlayerName() + " has made an incorrect accusation of: "
+							+ accusation.person + " in the " + accusation.room + " with the " + accusation.weapon
+							+ "! Buh buh buuuuhhhhhh!";
+					JOptionPane.showMessageDialog(clueGame, message,
+							"Game Not Over!", JOptionPane.WARNING_MESSAGE);
+				}
+				clueGame.humanPlayer.setHasMoved(true);
+			} else {
+				JOptionPane.showMessageDialog(clueGame, "It's Not Your Turn!",
+						"Mr. T says 'I pity da foo that do that'", JOptionPane.WARNING_MESSAGE);
+			}
 		}
 		
 	}

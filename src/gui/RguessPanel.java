@@ -26,4 +26,8 @@ public class RguessPanel extends JPanel {
 		
 		setBorder(new TitledBorder(new EtchedBorder(), "Room Guess"));
 	}
+	
+	public String returnString() {
+		return (String) guess.getSelectedItem();
+	}
 }

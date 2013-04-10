@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 public class ComputerPlayer extends Player {
 	
 	private char lastRoomVisited;
@@ -79,6 +81,13 @@ public class ComputerPlayer extends Player {
 		Card weaponCard = weapon_possibilities.get(0);
 		Card roomCard = new Card(roomName, Card.CardType.ROOM);
 		
+		String accusedPerson = personCard.getCardName();
+		for (Player p : clueGame.players) {
+			if(p.getPlayerName().equalsIgnoreCase(accusedPerson)) {
+				p.moveTo(this.currentLocation);
+			}
+		}
+		
 		return new Solution(personCard, weaponCard, roomCard);
 	}
 	
@@ -101,12 +110,11 @@ public class ComputerPlayer extends Player {
 			currentLocation = clueGame.board.calcIndex(target.getRow(), target.getCol());
 			if(clueGame.board.getCellAt(currentLocation).isDoorway()) {
 				suggestion = createSuggestion();
+				clueGame.setPlayerGuess(suggestion);
 			}
-			clueGame.setPlayerGuess(suggestion);
 			if(suggestion != null) {
 				accusation = suggestion;
 				result = clueGame.handleSuggestion(suggestion.person, suggestion.weapon, suggestion.room, this);
-				clueGame.setPlayerGuessResult(result);
 				if(result.getCardName().equalsIgnoreCase("No new clues")) {
 					accusationReady = true;
 				}
@@ -115,14 +123,34 @@ public class ComputerPlayer extends Player {
 		}
 	}
 	
+	private void makeAccusation() {
+		//If any of the cards in accusation are in their hand, exit the fxn.
+		if(myCards.contains(accusation.getPerson()) || myCards.contains(accusation.getRoom())
+				|| myCards.contains(accusation.getWeapon())) 
+		{
+			accusationReady = false;
+			return;
+		}
+		boolean correct = clueGame.checkAccusation(accusation);
+		if(correct) {
+			String message = this.getPlayerName() + " has won the game with a correct guess of: "
+					+ accusation.person + " in the " + accusation.room + " with the " + accusation.weapon
+					+ "!";
+			JOptionPane.showMessageDialog(clueGame, message,
+					"Game Over!", JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			String message = this.getPlayerName() + " has made an incorrect accusation of: "
+					+ accusation.person + " in the " + accusation.room + " with the " + accusation.weapon
+					+ "! Buh buh buuuuhhhhhh!";
+			JOptionPane.showMessageDialog(clueGame, message,
+					"Game Not Over!", JOptionPane.WARNING_MESSAGE);
+			accusationReady = false;
+		}
+	}
+	
 	/*
 	 * Getters and Setters for Testing only
 	 */
-
-	private void makeAccusation() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public char getLastRoomVisited() {
 		return lastRoomVisited;

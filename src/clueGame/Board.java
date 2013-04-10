@@ -1,5 +1,7 @@
 package clueGame;
 
+import gui.GuessGUI;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -88,8 +90,7 @@ public class Board extends JPanel implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		//Make sure that the human is the only one to respond to mouse listener
-		System.out.println(e.getX() + ", " + e.getY());
-		if(clueGame.players.get(clueGame.curPlayerTurn) == clueGame.humanPlayer) {
+		if(clueGame.players.get(clueGame.curPlayerTurn) == clueGame.humanPlayer && !clueGame.humanPlayerHasMoved()) {
 			BoardCell selection = null;
 			Object[] t =  targets.toArray();
 			for(int i = 0; i < targets.size(); i++) {
@@ -101,12 +102,22 @@ public class Board extends JPanel implements MouseListener {
 			if(selection != null) {
 				HumanPlayer p = (HumanPlayer) clueGame.players.get(clueGame.curPlayerTurn);
 				p.currentLocation = calcIndex(selection.getRow(), selection.getCol());
+				repaint();
+				if (selection.isDoorway()) {
+					GuessGUI suggestDialog = new GuessGUI(this, (RoomCell) selection);
+					suggestDialog.setVisible(true);
+					clueGame.setPlayerGuess(p.getGuess());
+					System.out.println(p.getGuess());
+					Card x = clueGame.handleSuggestion(p.getGuess().person, 
+							p.getGuess().weapon, p.getGuess().room, p);
+					System.out.println(x.getCardName());
+				}
 				p.setHasMoved(true);
 				repaint();
+				return;
 			} else {
 				JOptionPane.showMessageDialog(clueGame, "Not a valid cell",
 						"Oops!", JOptionPane.WARNING_MESSAGE);
-
 			}
 		}
 		

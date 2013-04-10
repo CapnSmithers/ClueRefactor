@@ -23,4 +23,8 @@ public class WguessPanel extends JPanel {
 		
 		setBorder(new TitledBorder(new EtchedBorder(), "Weapon Guess"));
 	}
+	
+	public String returnString() {
+		return (String) guess.getSelectedItem();
+	}
 }

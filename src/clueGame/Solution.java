@@ -31,12 +31,25 @@ public class Solution {
 	}
 	
 	public boolean matches(Solution s) {
-		return (s.person == this.person &&
-				s.weapon == this.weapon &&
-				s.room == this.room);
+		return (s.person.equalsIgnoreCase(this.person) &&
+				s.weapon.equalsIgnoreCase(this.weapon) &&
+				s.room.equalsIgnoreCase(this.room));
 	}
 	
 	public String toString() {
 		return person + "; " + weapon + "; " + room;
+	}
+	
+	//Getters for cards
+	public Card getPerson() {
+		return new Card(person, Card.CardType.PERSON);
+	}
+	
+	public Card getRoom() {
+		return new Card(room, Card.CardType.ROOM);
+	}
+	
+	public Card getWeapon() {
+		return new Card(weapon, Card.CardType.WEAPON);
 	}
 }

@@ -23,4 +23,8 @@ public class PguessPanel extends JPanel {
 		
 		setBorder(new TitledBorder(new EtchedBorder(), "Person Guess"));
 	}
+	
+	public String returnString() {
+		return (String) guess.getSelectedItem();
+	}
 }
